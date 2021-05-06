@@ -1,0 +1,211 @@
+﻿@page "/"
+
+@inject GymServices service
+
+
+<div class="container">
+    <div class="row bg-light">
+        <div class="form-group">
+            <label for="Description">Bar Code</label>
+            <input type="text" id="Description" class="form-control" @bind="@BarCode" />
+        </div>
+        <div class="text-center p-3 mb-3">
+            <button class="btn btn-info" @onclick="Refresh"> Login</button>
+        </div>
+
+        <table class="table table-bordered">
+            <thead class="thead-dark">
+                <tr>
+                    <th>Client Id</th>
+                    <th>Name</th>
+                    <th>Phone</th>
+                    <th>Email</th>
+                    <th>IsDeleted</th>
+                    <th>Photo</th>
+                    <th>InsertDate</th>
+                    <th>IDCard</th>
+                    <th>Barcode</th>
+                    <th>Comment</th>
+                    <th>Delete</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Clients.Any())
+                {
+                    @if (Clients[0].Barcode == BarCode)
+                    {
+                        @foreach (var client in Clients)
+                        {
+                            <tr @onclick="(() => SetClientForUpdate(client))">
+                                <td>@client.ClientId</td>
+                                <td>@client.Name</td>
+                                <td>@client.Phone</td>
+                                <td>@client.Email</td>
+                                <td>@client.IsDeleted</td>
+                                <td>@client.Photo</td>
+                                <td>@client.InsertDate</td>
+                                <td>@client.IDCard</td>
+                                <td>@client.Barcode</td>
+                                <td>@client.Comment</td>
+                                <td><button class="btn btn-danger" @onclick="(() => DeleteClient(client))">Delete</button></td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        @foreach (var client in Clients)
+                        {
+                            @if (client.Barcode == BarCode)
+                            {
+
+                                <tr @onclick="(() => SetClientForUpdate(client))">
+                                    <td>@client.ClientId</td>
+                                    <td>@client.Name</td>
+                                    <td>@client.Phone</td>
+                                    <td>@client.Email</td>
+                                    <td>@client.IsDeleted</td>
+                                    <td>@client.Photo</td>
+                                    <td>@client.InsertDate</td>
+                                    <td>@client.IDCard</td>
+                                    <td>@client.Barcode</td>
+                                    <td>@client.Comment</td>
+                                </tr>
+                            }
+
+
+                        }
+                    }
+                }
+
+                else
+                {
+                    <tr><td colspan="6"><strong>No products available</strong></td></tr>
+                }
+            </tbody>
+        </table>
+
+    </div>
+
+
+    <div class="row bg-light">
+        <label for="Description"></label>
+        <table class="table table-bordered">
+            <thead class="thead-dark">
+                <tr>
+                    <th>Client Id</th>
+                    <th>BarCode</th>
+                    <th>Date</th>
+
+                </tr>
+            </thead>
+            <tbody>
+                @if (Entries.Any())
+                {
+                    @if (Entries[0].Barcode == BarCode)
+                    {
+                        @foreach (var entrie in Entries)
+                        {
+                <tr>
+                    <td>@entrie.ClientId</td>
+                    <td>@entrie.Barcode</td>
+                    <td>@entrie.Date</td>
+
+                </tr>
+                        }
+                    }
+
+                    else
+                    {
+                        @foreach (var entrie in Entries)
+                        {
+                            @if (entrie.Barcode == BarCode)
+                        {
+            <tr>
+                <td>@entrie.ClientId</td>
+                <td>@entrie.Barcode</td>
+                <td>@entrie.Date</td>
+
+            </tr>
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    <tr><td colspan="6"><strong>No client available</strong></td></tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+
+    @code {
+        public String BarCode { get; set; }
+
+
+        List<Data.Models.Client> Clients = new List<Data.Models.Client>();
+        List<Data.Models.Entries> Entries = new List<Data.Models.Entries>();
+        private async Task Refresh()
+        {
+
+            await RefreshClients();
+            await AddNewEntries();
+            await RefreshEntries();
+
+        }
+
+        private async Task RefreshClients()
+        {
+            Clients = await service.GetClientAsync();
+        }
+        private async Task RefreshEntries()
+        {
+            Entries = await service.GetEntriesAsync();
+        }
+
+        public Data.Models.Client NewClient { get; set; } = new Data.Models.Client();
+        private async Task AddNewClient()
+        {
+            await service.AddClientAsync(NewClient);
+            NewClient = new Data.Models.Client();
+            await RefreshClients();
+        }
+
+        Data.Models.Client UpdateClient = new Data.Models.Client();
+        private void SetClientForUpdate(Data.Models.Client client)
+        {
+            UpdateClient = client;
+        }
+
+        private async Task UpdateClientData()
+        {
+            await service.UpdateClientAsync(UpdateClient);
+            await RefreshClients();
+        }
+
+        private async Task DeleteClient(Data.Models.Client client)
+        {
+            await service.DeleteClientAsync(client);
+            await RefreshClients();
+        }
+
+        public Data.Models.Entries NewEntries { get; set; } = new Data.Models.Entries();
+        private async Task AddNewEntries()
+        {
+
+            foreach (var client in Clients)
+            {
+                if (client.Barcode == BarCode)
+                {
+                    NewEntries.ClientId = client.ClientId;
+                    NewEntries.Barcode = BarCode;
+                    NewEntries.GymId = 1001;
+                    NewEntries.Date = DateTime.Now;
+                }
+            }
+
+            await service.AddEntriesAsync(NewEntries);
+
+        }
+    }
