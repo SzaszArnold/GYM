@@ -30,6 +30,7 @@ namespace GYM
         {
             services.AddRazorPages();
             services.AddServerSideBlazor();
+            services.AddSingleton<Data.Models.BarCode>();
             services.AddDbContext<GymDbContext>(options =>
             {
                 options.UseSqlite("Data Source = Gym.db");

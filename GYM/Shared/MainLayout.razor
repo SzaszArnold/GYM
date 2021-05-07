@@ -1,11 +1,12 @@
 ﻿@inherits LayoutComponentBase
-
+@inject Data.Models.BarCode barcode
 <div class="sidebar">
     <NavMenu />
 </div>
 
 <div class="main">
     <div class="top-row px-4">
+        <label for="name">Scanned barcode: @barcode.Code</label>
         <a href="https://docs.microsoft.com/aspnet/" target="_blank">About</a>
     </div>
 

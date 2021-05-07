@@ -8,7 +8,12 @@
 <div class="@NavMenuCssClass" @onclick="ToggleNavMenu">
     <ul class="nav flex-column">
         <li class="nav-item px-3">
-            <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
+            <NavLink class="nav-link" href="/" Match="NavLinkMatch.All">
+                <span class="oi oi-account-login" aria-hidden="true"></span> Scan Your Card
+            </NavLink>
+        </li>
+        <li class="nav-item px-3">
+            <NavLink class="nav-link" href="/home" Match="NavLinkMatch.All">
                 <span class="oi oi-home" aria-hidden="true"></span> Home
             </NavLink>
         </li>
@@ -25,6 +30,12 @@
         <li class="nav-item px-3">
             <NavLink class="nav-link" href="statistics">
                 <span class="oi oi-bar-chart" aria-hidden="true"></span> Statistics
+            </NavLink>
+        </li>
+
+        <li class="nav-item px-3">
+            <NavLink class="nav-link" href="test">
+                <span class="oi oi-terminal" aria-hidden="true"></span> Test
             </NavLink>
         </li>
     </ul>
