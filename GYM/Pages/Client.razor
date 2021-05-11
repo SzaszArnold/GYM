@@ -52,7 +52,8 @@
                     </tbody>
                 </table>
             </div>
-
+            @if (barcode.IsAdmin)
+            {
             <div class="row m-5">
                 <div class="col-5 bg-light m-2 justify-content-start">
 
@@ -138,8 +139,11 @@
                         </div>
                     </EditForm>
                 </div>
+               
             </div>
+            }
         }
+        else { <p>No Card scanned!</p>}
     }
 
 

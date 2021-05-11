@@ -8,5 +8,6 @@ namespace GYM.Data.Models
     public class BarCode
     {
         public string Code { get; set; }
+        public bool IsAdmin { get; set; }
     }
 }

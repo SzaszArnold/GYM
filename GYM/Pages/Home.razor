@@ -2,11 +2,8 @@
 
 @inject GymServices service
 @inject Data.Models.BarCode barcode
-
-@foreach (var clientt in Clients)
+@if (barcode.Code != "")
 {
-    if (clientt.Barcode == barcode.Code)
-    {
         <div class="container">
             <div class="row bg-light">
                 <div class="form-group">
@@ -37,7 +34,7 @@
                     <tbody>
                         @if (Clients.Any())
                         {
-                            @if (Clients[0].Barcode == barcode.Code)
+                            @if (barcode.IsAdmin)
                             {
                                 @foreach (var client in Clients)
                                 {
@@ -106,7 +103,7 @@
                     <tbody>
                         @if (Entries.Any())
                         {
-                            @if (Entries[0].Barcode == barcode.Code)
+                            @if (barcode.IsAdmin)
                             {
                                 @foreach (var entrie in Entries)
                                 {
@@ -143,9 +140,8 @@
                 </table>
             </div>
         </div>
-    }
-   
 }
+else { <p>No card scenned!</p>}
 
 @code {
 

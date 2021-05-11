@@ -1,5 +1,7 @@
 ﻿@page "/"
 @inject Data.Models.BarCode barcode
+@inject Data.Database.GymServices service
+
 <div class="row bg-light">
     <div class="form-group">
         <label for="Description">Bar Code</label>
@@ -7,10 +9,32 @@
     </div>
     <div class="text-center p-3 mb-3">
         <input type="text" id="Description" class="form-control" @bind="@barcode.Code" />
-        <a href="/home">Scan</a>
+        <a href="/home" onclick="@SetClient()">Scan</a>
     </div>
 </div>
 
 @code {
+    List<Data.Models.Client> Clients = new List<Data.Models.Client>();
+    protected override async Task OnInitializedAsync()
+    {
+        await RefreshClients();
+
+
+    }
+
+    private async Task RefreshClients()
+    {
+        Clients = await service.GetClientAsync();
+    }
+    public bool SetClient()
+    {
+        if (barcode.Code == Clients[0].Barcode)
+        {
+            barcode.IsAdmin = true;
+        }
+        else { barcode.IsAdmin = false; }
+        return true;
+
+    }
 
 }
