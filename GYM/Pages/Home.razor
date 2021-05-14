@@ -4,165 +4,123 @@
 @inject Data.Models.BarCode barcode
 @if (barcode.Code != "")
 {
-        <div class="container">
-            <div class="row bg-light">
-                <div class="form-group">
-                    <label for="Description">Bar Code</label>
-
-                </div>
-                <div class="text-center p-3 mb-3">
-                    <input type="text" id="Description" class="form-control" @bind="@barcode.Code" />
-                    <button class="btn btn-info" @onclick="Login"> Enter</button>
-                </div>
-
-                <table class="table table-bordered">
-                    <thead class="thead-dark">
-                        <tr>
-                            <th>Client Id</th>
-                            <th>Name</th>
-                            <th>Phone</th>
-                            <th>Email</th>
-                            <th>IsDeleted</th>
-                            <th>Photo</th>
-                            <th>InsertDate</th>
-                            <th>IDCard</th>
-                            <th>Barcode</th>
-                            <th>Comment</th>
-                            <th>Delete</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @if (Clients.Any())
-                        {
-                            @if (barcode.IsAdmin)
-                            {
-                                @foreach (var client in Clients)
-                                {
-                                    <tr @onclick="(() => SetClientForUpdate(client))">
-                                        <td>@client.ClientId</td>
-                                        <td>@client.Name</td>
-                                        <td>@client.Phone</td>
-                                        <td>@client.Email</td>
-                                        <td>@client.IsDeleted</td>
-                                        <td>@client.Photo</td>
-                                        <td>@client.InsertDate</td>
-                                        <td>@client.IDCard</td>
-                                        <td>@client.Barcode</td>
-                                        <td>@client.Comment</td>
-                                        <td><button class="btn btn-danger" @onclick="(() => DeleteClient(client))">Delete</button></td>
-                                    </tr>
-                                }
-                            }
-                            else
-                            {
-                                @foreach (var client in Clients)
-                                {
-                                    @if (client.Barcode == barcode.Code)
-                                    {
-
-                                        <tr @onclick="(() => SetClientForUpdate(client))">
-                                            <td>@client.ClientId</td>
-                                            <td>@client.Name</td>
-                                            <td>@client.Phone</td>
-                                            <td>@client.Email</td>
-                                            <td>@client.IsDeleted</td>
-                                            <td>@client.Photo</td>
-                                            <td>@client.InsertDate</td>
-                                            <td>@client.IDCard</td>
-                                            <td>@client.Barcode</td>
-                                            <td>@client.Comment</td>
-                                        </tr>
-                                    }
-
-
-                                }
-                            }
-                        }
-
-                        else
-                        {
-                            <tr><td colspan="6"><strong>No card scanned!</strong></td></tr>
-                        }
-                    </tbody>
-                </table>
-
+    <div class="container">
+        <div class="row bg-light">
+            <div class="text-center p-3 mb-3">
+                <label for="Description">Bar Code: @barcode.Code</label>
             </div>
-
-
-            <div class="row bg-light">
-                <label for="Description"></label>
-                <table class="table table-bordered">
-                    <thead class="thead-dark">
-                        <tr>
-                            <th>Client Id</th>
-                            <th>BarCode</th>
-                            <th>Date</th>
-
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @if (Entries.Any())
-                        {
-                            @if (barcode.IsAdmin)
-                            {
-                                @foreach (var entrie in Entries)
-                                {
-                                    <tr>
-                                        <td>@entrie.ClientId</td>
-                                        <td>@entrie.Barcode</td>
-                                        <td>@entrie.Date</td>
-
-                                    </tr>
-                                }
-                            }
-
-                            else
-                            {
-                                @foreach (var entrie in Entries)
-                                {
-                                    @if (entrie.Barcode == barcode.Code)
-                                    {
-                                        <tr>
-                                            <td>@entrie.ClientId</td>
-                                            <td>@entrie.Barcode</td>
-                                            <td>@entrie.Date</td>
-
-                                        </tr>
-                                    }
-                                }
-                            }
-                        }
-                        else
-                        {
-                            <tr><td colspan="6"><strong>No card scanned!</strong></td></tr>
-                        }
-                    </tbody>
-                </table>
+            <div class="text-center p-3 mb-3">
+                <label for="Description">Select a ticket.</label>
             </div>
+            <div class="text-center p-3 mb-3">
+                <select class="form-control" @bind="@SelectedTicketID">
+                    @foreach (var clientTicket in ClientTickets)
+                    {@if (clientTicket.Barcode == barcode.Code)
+                        {
+                            <option value="@clientTicket.TicketId"> @GetTicketName(clientTicket.TicketId) </option>
+                        }
+                }
+                    }
+                    }
+                </select>
+            </div>
+            <div class="text-center p-3 mb-3">
+                <button class="btn btn-info" @onclick="Login"> Enter</button>
+            </div>
+            <table class="table table-bordered">
+                <thead class="thead-dark">
+                    <tr>
+                        <th>Name</th>
+                        <th>Phone</th>
+                        <th>Email</th>
+                        <th>IsDeleted</th>
+                        <th>Photo</th>
+                        <th>InsertDate</th>
+                        <th>IDCard</th>
+                        <th>Barcode</th>
+                        <th>Comment</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Clients.Any())
+                    {
+                        @foreach (var client in Clients)
+                        {
+                            @if (client.Barcode == barcode.Code)
+                            {
+                                <tr>
+                                    <td>@client.Name</td>
+                                    <td>@client.Phone</td>
+                                    <td>@client.Email</td>
+                                    <td>@client.IsDeleted</td>
+                                    <td><img src="https://cdn4.iconfinder.com/data/icons/e-commerce-181/512/477_profile__avatar__man_-512.png" alt="Profile" width="50" height="50"></td>
+                                    <td>@client.InsertDate</td>
+                                    <td>@client.IDCard</td>
+                                    <td>@client.Barcode</td>
+                                    <td>@client.Comment</td>
+                                </tr>
+                            }
+
+                        }
+                    }
+
+                </tbody>
+            </table>
+            <table class="table table-bordered">
+                <thead class="thead-dark">
+                    <tr>
+                        <th>Name</th>
+                        <th>Bought</th>
+                        <th>Entries</th>
+                        <th>Valid</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Clients.Any())
+                    {
+                        @foreach (var ticket in ClientTickets)
+                        {
+                            @if (ticket.Barcode == barcode.Code && ticket.TicketId == SelectedTicketID)
+                            {
+                                <tr>
+                                    <td>@GetTicketName(ticket.TicketId)</td>
+                                    <td>@ticket.Bought</td>
+                                    <td>@ticket.Entries/@GetValidIntervall(ticket.TicketId)</td>
+                                    <td>@ticket.Valid</td>
+                                </tr>
+                            }
+                        }
+                    }
+                </tbody>
+            </table>
         </div>
+    </div>
 }
-else { <p>No card scenned!</p>}
+else
+{ <p>No card scenned!</p>}
 
 @code {
 
 
-
+    int SelectedTicketID { get; set; }
     List<Data.Models.Client> Clients = new List<Data.Models.Client>();
     List<Data.Models.Entries> Entries = new List<Data.Models.Entries>();
+    List<Data.Models.ClientTickets> ClientTickets = new List<Data.Models.ClientTickets>();
+    List<Data.Models.SeasonTicket> SeasonTickets = new List<Data.Models.SeasonTicket>();
     protected override async Task OnInitializedAsync()
     {
 
         await RefreshEntries();
         await RefreshClients();
+        await RefreshClientTickets();
+        await RefreshSeasonTicket();
 
     }
     private async Task Login()
     {
-
-        await RefreshEntries();
         await AddNewEntries();
-
-
+        await UpdateClientTicketData();
+        await RefreshClientTickets();
     }
 
     private async Task RefreshClients()
@@ -172,6 +130,14 @@ else { <p>No card scenned!</p>}
     private async Task RefreshEntries()
     {
         Entries = await service.GetEntriesAsync();
+    }
+    private async Task RefreshClientTickets()
+    {
+        ClientTickets = await service.GetClientTicketsAsync();
+    }
+    private async Task RefreshSeasonTicket()
+    {
+        SeasonTickets = await service.GetTicketAsync();
     }
 
     public Data.Models.Client NewClient { get; set; } = new Data.Models.Client();
@@ -209,6 +175,7 @@ else { <p>No card scenned!</p>}
             if (client.Barcode == barcode.Code)
             {
                 NewEntries.ClientId = client.ClientId;
+                NewEntries.TicketId = SelectedTicketID;
                 NewEntries.Barcode = barcode.Code;
                 NewEntries.GymId = 1001;
                 NewEntries.Date = DateTime.Now;
@@ -216,6 +183,39 @@ else { <p>No card scenned!</p>}
         }
 
         await service.AddEntriesAsync(NewEntries);
+
+    }
+    private string GetTicketName(int ID)
+    {
+        string Name = "";
+        foreach (var ticket in SeasonTickets) { if (ticket.TicketId == ID) { Name = ticket.Name; } }
+        return Name;
+    }
+    private int GetValidIntervall(int ID)
+    {
+        int Valid = 0;
+        foreach (var ticket in SeasonTickets) { if (ticket.TicketId == ID) { Valid = ticket.ValidEntries; } }
+        return Valid;
+    }
+    public Data.Models.ClientTickets UpdateClientTicket { get; set; } = new Data.Models.ClientTickets();
+    private async Task UpdateClientTicketData()
+    {   foreach (var e in ClientTickets)
+        {
+            if (e.TicketId == SelectedTicketID)
+            {
+                UpdateClientTicket.Barcode = e.Barcode;
+                UpdateClientTicket.Bought = e.Bought;
+                UpdateClientTicket.ClientId = e.ClientId;
+                UpdateClientTicket.Entries = e.Entries + 1;
+                UpdateClientTicket.FirstUse = DateTime.Now;
+                UpdateClientTicket.GymId = e.GymId;
+                UpdateClientTicket.Price = e.Price;
+                UpdateClientTicket.TicketId = e.TicketId;
+                UpdateClientTicket.Valid = e.Valid;
+            }
+        }
+
+        await service.UpdateClientTicketsAsync(UpdateClientTicket);
 
     }
 }

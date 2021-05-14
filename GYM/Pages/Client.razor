@@ -6,7 +6,7 @@
 <div class="container">
     @foreach (var clientt in Clients)
     {
-        if (clientt.Barcode == barcode.Code)
+        if (clientt.Barcode == barcode.Code && barcode.IsAdmin)
         {
             <div class="row bg-light">
                 <table class="table table-bordered">
@@ -16,7 +16,7 @@
                             <th>Name</th>
                             <th>Phone</th>
                             <th>Email</th>
-                            <th>IsDeleted</th>
+                            
                             <th>Photo</th>
                             <th>InsertDate</th>
                             <th>IdCard</th>
@@ -35,8 +35,8 @@
                                     <td>@client.Name</td>
                                     <td>@client.Phone</td>
                                     <td>@client.Email</td>
-                                    <td>@client.IsDeleted</td>
-                                    <td>@client.Photo</td>
+                                    
+                                    <td><img src="https://cdn4.iconfinder.com/data/icons/e-commerce-181/512/477_profile__avatar__man_-512.png" alt="Profile" width="50" height="50"></td>
                                     <td>@client.InsertDate</td>
                                     <td>@client.IDCard</td>
                                     <td>@client.Barcode</td>
@@ -54,100 +54,149 @@
             </div>
             @if (barcode.IsAdmin)
             {
-            <div class="row m-5">
-                <div class="col-5 bg-light m-2 justify-content-start">
+                <div class="row m-5">
+                    <div class="col-5 bg-light m-2 justify-content-start">
 
-                    <div class="p-3 mb-3 bg-primary text-white text-center">Add New Client</div>
+                        <div class="p-3 mb-3 bg-primary text-white text-center">Add New Client</div>
 
-                    <EditForm Model="@NewClient">
-                        <div class="form-group">
-                            <label for="name">Client Name</label>
-                            <input type="text" id="name" class="form-control" @bind-value="@NewClient.Name" />
-                        </div>
+                        <EditForm Model="@NewClient">
+                            <div class="form-group">
+                                <label for="name">Client Name</label>
+                                <input type="text" id="name" class="form-control" @bind-value="@NewClient.Name" />
+                            </div>
 
-                        <div class="form-group">
-                            <label for="price">Phone</label>
-                            <input type="text" id="price" class="form-control" @bind="@NewClient.Phone" />
-                        </div>
+                            <div class="form-group">
+                                <label for="price">Phone</label>
+                                <input type="text" id="price" class="form-control" @bind="@NewClient.Phone" />
+                            </div>
 
-                        <div class="form-group">
-                            <label for="quantity">Email</label>
-                            <input type="text" id="quantity" class="form-control" @bind="@NewClient.Email" />
-                        </div>
+                            <div class="form-group">
+                                <label for="quantity">Email</label>
+                                <input type="text" id="quantity" class="form-control" @bind="@NewClient.Email" />
+                            </div>
 
-                        <div class="form-group">
-                            <label for="Description">Photo</label>
-                            <input type="text" id="Description" class="form-control" @bind="@NewClient.Photo" />
-                        </div>
+                            <div class="form-group">
+                                <label for="Description">Photo</label>
+                                <input type="text" id="Description" class="form-control" @bind="@NewClient.Photo" />
+                            </div>
 
-                        <div class="form-group">
-                            <label for="Description">IdCard</label>
-                            <input type="text" id="Description" class="form-control" @bind="@NewClient.IDCard" />
-                        </div>
-                        <div class="form-group">
-                            <label for="Description">Barcode</label>
-                            <input type="text" id="Description" class="form-control" @bind="@NewClient.Barcode" />
-                        </div>
-                        <div class="form-group">
-                            <label for="Description">Comment</label>
-                            <input type="text" id="Description" class="form-control" @bind="@NewClient.Comment" />
-                        </div>
+                            <div class="form-group">
+                                <label for="Description">IdCard</label>
+                                <input type="text" id="Description" class="form-control" @bind="@NewClient.IDCard" />
+                            </div>
+                            <div class="form-group">
+                                <label for="Description">Barcode</label>
+                                <input type="text" id="Description" class="form-control" @bind="@NewClient.Barcode" />
+                            </div>
+                            <div class="form-group">
+                                <label for="Description">Comment</label>
+                                <input type="text" id="Description" class="form-control" @bind="@NewClient.Comment" />
+                            </div>
 
-                        <div class="text-center p-3 mb-3">
-                            <button class="btn btn-info" @onclick="AddNewClient"> Add Client</button>
-                        </div>
-                    </EditForm>
+                            <div class="text-center p-3 mb-3">
+                                <button class="btn btn-info" @onclick="AddNewClient"> Add Client</button>
+                            </div>
+                        </EditForm>
+                    </div>
+
+                    <div class="col-5 bg-light m-2 justify-content-end">
+                        <div class="p-3 mb-1 bg-primary text-white text-center">Update Client</div>
+
+                        <EditForm Model="@UpdateClient">
+                            <div class="form-group">
+                                <label for="name">Client Name</label>
+                                <input type="text" id="name" class="form-control" @bind-value="@UpdateClient.Name" />
+                            </div>
+
+                            <div class="form-group">
+                                <label for="price">Phone</label>
+                                <input type="text" id="price" class="form-control" @bind="@UpdateClient.Phone" />
+                            </div>
+
+                            <div class="form-group">
+                                <label for="quantity">Email</label>
+                                <input type="text" id="quantity" class="form-control" @bind="@UpdateClient.Email" />
+                            </div>
+                            <div class="form-group">
+                                <label for="Description">Photo</label>
+                                <input type="text" id="Description" class="form-control" @bind="@UpdateClient.Photo" />
+                            </div>
+                            <div class="form-group">
+                                <label for="Description">IdCard</label>
+                                <input type="text" id="Description" class="form-control" @bind="@UpdateClient.IDCard" />
+                            </div>
+                            <div class="form-group">
+                                <label for="Description">Barcode</label>
+                                <input type="text" id="Description" class="form-control" @bind="@UpdateClient.Barcode" />
+                            </div>
+                            <div class="form-group">
+                                <label for="Description">Comment</label>
+                                <input type="text" id="Description" class="form-control" @bind="@UpdateClient.Comment" />
+                            </div>
+
+                            <div class="text-center p-3 mb-3">
+                                <button class="btn btn-info" @onclick="UpdateClientData"> Update Client</button>
+                            </div>
+                        </EditForm>
+                    </div>
+
                 </div>
-
-                <div class="col-5 bg-light m-2 justify-content-end">
-                    <div class="p-3 mb-1 bg-primary text-white text-center">Update Client</div>
-
-                    <EditForm Model="@UpdateClient">
-                        <div class="form-group">
-                            <label for="name">Client Name</label>
-                            <input type="text" id="name" class="form-control" @bind-value="@UpdateClient.Name" />
-                        </div>
-
-                        <div class="form-group">
-                            <label for="price">Phone</label>
-                            <input type="text" id="price" class="form-control" @bind="@UpdateClient.Phone" />
-                        </div>
-
-                        <div class="form-group">
-                            <label for="quantity">Email</label>
-                            <input type="text" id="quantity" class="form-control" @bind="@UpdateClient.Email" />
-                        </div>
-                        <div class="form-group">
-                            <label for="Description">Photo</label>
-                            <input type="text" id="Description" class="form-control" @bind="@UpdateClient.Photo" />
-                        </div>
-                        <div class="form-group">
-                            <label for="Description">IdCard</label>
-                            <input type="text" id="Description" class="form-control" @bind="@UpdateClient.IDCard" />
-                        </div>
-                        <div class="form-group">
-                            <label for="Description">Barcode</label>
-                            <input type="text" id="Description" class="form-control" @bind="@UpdateClient.Barcode" />
-                        </div>
-                        <div class="form-group">
-                            <label for="Description">Comment</label>
-                            <input type="text" id="Description" class="form-control" @bind="@UpdateClient.Comment" />
-                        </div>
-
-                        <div class="text-center p-3 mb-3">
-                            <button class="btn btn-info" @onclick="UpdateClientData"> Update Client</button>
-                        </div>
-                    </EditForm>
-                </div>
-               
-            </div>
             }
         }
-        else { <p>No Card scanned!</p>}
+        if(!barcode.IsAdmin)
+        {
+        <div class="row bg-light">
+            <table class="table table-bordered">
+                <thead class="thead-dark">
+                    <tr>
+                        <th>Name</th>
+                        <th>Phone</th>
+                        <th>Email</th>
+                        
+                        <th>Photo</th>
+                        <th>InsertDate</th>
+                        <th>IdCard</th>
+                        <th>Barcode</th>
+                        <th>Comment</th>
+                        
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Clients.Any())
+                    {
+                        @foreach (var client in Clients)
+                        {
+                            @if (client.Barcode == barcode.Code)
+                            {
+                            <tr>
+                                
+                                <td>@client.Name</td>
+                                <td>@client.Phone</td>
+                                <td>@client.Email</td>
+                               
+                                <td><img src="https://cdn4.iconfinder.com/data/icons/e-commerce-181/512/477_profile__avatar__man_-512.png" alt="Profile" width="50" height="50"></td>
+                                <td>@client.InsertDate</td>
+                                <td>@client.IDCard</td>
+                                <td>@client.Barcode</td>
+                                <td>@client.Comment</td>
+                              
+                            </tr>
+                                }
+                            }
+                    }
+                    else
+                    {
+                        <tr><td colspan="6"><strong>No client available</strong></td></tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+        
+        }
     }
 
 
-    </div>
+</div>
 
 @code {
 

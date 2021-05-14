@@ -52,8 +52,8 @@ namespace GYM.Data.Database
         {
             return new List<SeasonTicket>
     {
-        new SeasonTicket {TicketId=1001, Name="Daily", Price=15.00, ValidDay="30", ValidEntries="20",Deleted=false,GymId=1001,SHour=DateTime.Now,FHour=DateTime.Now,Daily="1"},
-        new SeasonTicket {TicketId=1002, Name="Morning", Price=10.00, ValidDay="30", ValidEntries="30",Deleted=false,GymId=1001,SHour=DateTime.Now,FHour=DateTime.Now,Daily="1"}
+        new SeasonTicket {TicketId=1001, Name="Daily", Price=15.00, ValidDay="30", ValidEntries=20,Deleted=false,GymId=1001,SHour=DateTime.Now,FHour=DateTime.Now,Daily="1"},
+        new SeasonTicket {TicketId=1002, Name="Morning", Price=10.00, ValidDay="30", ValidEntries=30,Deleted=false,GymId=1001,SHour=DateTime.Now,FHour=DateTime.Now,Daily="1"}
 
     };
         }
