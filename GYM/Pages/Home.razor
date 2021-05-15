@@ -27,6 +27,9 @@
             <div class="text-center p-3 mb-3">
                 <button class="btn btn-info" @onclick="Login"> Enter</button>
             </div>
+            <div class="text-center p-3 mb-3">
+                <label for="Description">Succes: @Succes</label>
+            </div>
             <table class="table table-bordered">
                 <thead class="thead-dark">
                     <tr>
@@ -101,7 +104,7 @@ else
 
 @code {
 
-
+    String Succes { get; set; }
     int SelectedTicketID { get; set; }
     List<Data.Models.Client> Clients = new List<Data.Models.Client>();
     List<Data.Models.Entries> Entries = new List<Data.Models.Entries>();
@@ -118,7 +121,7 @@ else
     }
     private async Task Login()
     {
-        await AddNewEntries();
+
         await UpdateClientTicketData();
         await RefreshClientTickets();
     }
@@ -199,22 +202,25 @@ else
     }
     public Data.Models.ClientTickets UpdateClientTicket { get; set; } = new Data.Models.ClientTickets();
     private async Task UpdateClientTicketData()
-    {   foreach (var e in ClientTickets)
+    {
+        foreach (var clientTicket in ClientTickets)
         {
-            if (e.TicketId == SelectedTicketID)
+            if (clientTicket.TicketId == SelectedTicketID && clientTicket.Barcode == barcode.Code)
             {
-                UpdateClientTicket.Barcode = e.Barcode;
-                UpdateClientTicket.Bought = e.Bought;
-                UpdateClientTicket.ClientId = e.ClientId;
-                UpdateClientTicket.Entries = e.Entries + 1;
-                UpdateClientTicket.FirstUse = DateTime.Now;
-                UpdateClientTicket.GymId = e.GymId;
-                UpdateClientTicket.Price = e.Price;
-                UpdateClientTicket.TicketId = e.TicketId;
-                UpdateClientTicket.Valid = e.Valid;
+                UpdateClientTicket = clientTicket;
+                if (UpdateClientTicket.Entries < GetValidIntervall(UpdateClientTicket.TicketId) && UpdateClientTicket.Valid==true)
+                {
+
+                    UpdateClientTicket.Entries += 1;
+                    Succes = "Succes";
+                    await AddNewEntries();
+                }
+                else
+                {
+                    Succes = "No more entries!";
+                }
             }
         }
-
         await service.UpdateClientTicketsAsync(UpdateClientTicket);
 
     }

@@ -3,7 +3,7 @@
 @inject Data.Database.GymServices service
 @inject Data.Models.BarCode barcode
 @if (barcode.IsAdmin)
-{
+{<div class="container">
     <div class="row bg-light">
         <div class="col-5 bg-light m-2 justify-content-start">
             <div class="p-3 mb-3 bg-primary text-white text-center">Add New Client Ticket</div>
@@ -11,9 +11,9 @@
                 <label>Select ticket type:</label>
                 <select class="form-control" @bind="@SelectedTicketID">
                     @foreach (var ticket in SeasonTickets)
-                        {
-                            <option value="@ticket.TicketId"> @ticket.Name </option>
-                        }  
+                    {
+                        <option value="@ticket.TicketId"> @ticket.Name </option>
+                    }
                     }
                     }
                 </select>
@@ -33,6 +33,50 @@
             </EditForm>
         </div>
     </div>
+    <div class="row bg-light">
+        <label for="Description"></label>
+        <table class="table table-bordered">
+            <thead class="thead-dark">
+                <tr>
+                    <th>ClientId</th>
+                    <th>TicketId</th>
+                    <th>Bought</th>
+                    <th>BarCode</th>
+                    <th>Entries</th>
+                    <th>Price</th>
+                    <th>Valid</th>
+                    <th>FirstUse</th>
+                    <th>GymId</th>
+                    <th>Suspend</th>
+
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var ticket in Tickets)
+                {
+                    {
+                        <tr>
+                            <td>@ticket.ClientId</td>
+                            <td>@ticket.TicketId</td>
+                            <td>@ticket.Bought</td>
+                            <td>@ticket.Barcode</td>
+                            <td>@ticket.Entries</td>
+                            <td>@ticket.Price</td>
+                            <td>@ticket.Valid</td>
+                            <td>@ticket.FirstUse</td>
+                            <td>@ticket.GymId</td>
+                            @if (ticket.Valid == true)
+                            {
+                            <td><button class="btn btn-danger" @onclick="(() => SuspendTicket(ticket))">Suspend</button></td>
+                            }
+                            else { <td><button class="btn btn-outline-success" @onclick="(() => SuspendTicket(ticket))">Validate</button></td>}
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
 }
 else 
 {
@@ -42,6 +86,7 @@ else
 @code {
     int SelectedTicketID { get; set; }
     List<Data.Models.Client> Clients = new List<Data.Models.Client>();
+    List<Data.Models.ClientTickets> Tickets = new List<Data.Models.ClientTickets>();
     public String BarCode { get; set; }
     public Data.Models.ClientTickets NewTicket { get; set; } = new Data.Models.ClientTickets();
     List<Data.Models.SeasonTicket> SeasonTickets = new List<Data.Models.SeasonTicket>();
@@ -49,6 +94,7 @@ else
     {
         await RefreshClients();
         await RefreshSeasonTicket();
+        await RefreshClientTickets();
     }
 
     private async Task RefreshClients()
@@ -58,6 +104,10 @@ else
     private async Task RefreshSeasonTicket()
     {
         SeasonTickets = await service.GetTicketAsync();
+    }
+    private async Task RefreshClientTickets()
+    {
+        Tickets = await service.GetClientTicketsAsync();
     }
     private async Task AddNewTicket()
     {
@@ -76,5 +126,13 @@ else
                 NewTicket = new Data.Models.ClientTickets();
             }
         }
+    }
+    private async Task SuspendTicket(Data.Models.ClientTickets ticket)
+    {if (ticket.Valid == true)
+            ticket.Valid = false;
+        else
+            ticket.Valid = true;
+        await service.UpdateClientTicketsAsync(ticket);
+        await RefreshClientTickets();
     }
 }
