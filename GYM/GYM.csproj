@@ -11,6 +11,8 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
+    <PackageReference Include="MudBlazor" Version="5.0.8" />
+    <PackageReference Include="Syncfusion.Blazor.Calendars" Version="19.1.0.63" />
   </ItemGroup>
 
 </Project>

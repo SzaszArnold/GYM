@@ -1,1 +1,16 @@
 ﻿
+@page "/test"
+
+<button @onclick="@(() => ShowDialog())" class="btn btn-primary">Show more</button>
+@code
+{
+    [CascadingParameter]
+    public IModalService Modal { get; set; }
+
+    void ShowDialog()
+    {
+        var parameters = new ModalParameters();
+        parameters.Add("MovieId", 55);
+        Modal.Show<LoginState>("Test",parameters);
+    }
+}

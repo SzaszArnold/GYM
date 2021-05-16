@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.31005.135
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GYM", "GYM.csproj", "{91242EFA-66E8-493E-B83A-94607B755415}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GYM", "GYM.csproj", "{F9678CAD-7D45-46DF-B9DD-7D1A4AF32048}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -11,15 +11,15 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{91242EFA-66E8-493E-B83A-94607B755415}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{91242EFA-66E8-493E-B83A-94607B755415}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{91242EFA-66E8-493E-B83A-94607B755415}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{91242EFA-66E8-493E-B83A-94607B755415}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F9678CAD-7D45-46DF-B9DD-7D1A4AF32048}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F9678CAD-7D45-46DF-B9DD-7D1A4AF32048}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F9678CAD-7D45-46DF-B9DD-7D1A4AF32048}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F9678CAD-7D45-46DF-B9DD-7D1A4AF32048}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {34C99C1C-7110-442C-897B-9C2CDA7746E0}
+		SolutionGuid = {1EAFCF70-C570-44E6-8FF0-9B296DFA956B}
 	EndGlobalSection
 EndGlobal

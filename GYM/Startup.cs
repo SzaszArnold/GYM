@@ -1,18 +1,12 @@
-using GYM.Data;
 using GYM.Data.Database;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Blazored.Modal;
+using Syncfusion.Blazor;
 
 namespace GYM
 {
@@ -38,11 +32,14 @@ namespace GYM
             });
             services.AddScoped<GymServices>();
             services.AddBlazoredModal();
+            services.AddSyncfusionBlazor();
+         
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense("NDQ2ODA1QDMxMzkyZTMxMmUzMGljZmRPeUhxWkJZeDc2SEhrekttREZ6MG1ZYzFXUjJGUUVDOEh0MlZSVzg9");
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();

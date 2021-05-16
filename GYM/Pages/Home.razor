@@ -210,7 +210,7 @@ else
                 UpdateClientTicket = clientTicket;
                 if (UpdateClientTicket.Entries < GetValidIntervall(UpdateClientTicket.TicketId) && UpdateClientTicket.Valid==true)
                 {
-
+                    
                     UpdateClientTicket.Entries += 1;
                     Succes = "Succes";
                     await AddNewEntries();
