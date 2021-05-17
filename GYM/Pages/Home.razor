@@ -24,16 +24,11 @@
                     }
                 </select>
             </div>
-   
-
             <MatDialog @bind-IsOpen="@dialogIsOpen">
                 <MatDialogTitle>Hi @barcode.Code</MatDialogTitle>
                 <MatDialogContent>
-                    
-                   
                         <p>Enter the gym!</p>
-                        <label for="Description">@Succes</label>
-                   
+                        <label for="Description">@Succes</label>                 
                 </MatDialogContent>
                 <MatDialogActions>
                     <MatButton OnClick="@(e => { dialogIsOpen = false; })">Ok</MatButton>
@@ -244,11 +239,5 @@ else
     void OpenDialog()
     {
         dialogIsOpen = true;
-    }
-
-    void OkClick()
-    {
-
-        dialogIsOpen = false;
     }
 }

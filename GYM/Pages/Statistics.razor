@@ -2,6 +2,11 @@
 @inject Data.Database.GymServices service
 @inject Data.Models.BarCode barcode
 
+@if (!barcode.IsAdmin)
+{<p>No permission!</p>}
+
+@if (barcode.IsAdmin)
+{
 <div class="container">
     <div class="row bg-light">
         <div class="text-center p-3 mb-3">
@@ -21,63 +26,64 @@
         </div>
     </div>
 </div>
+}
 @if (barcode.IsAdmin && SelectedFilter == "entries")
 {
-<div class="row bg-light">
-    <label for="Description"></label>
-    <div class="text-center p-3 mb-3">
-        <label>Enter client barcode!</label>
-        <input type="text" id="Description" class="form-control" @bind="@FilterBarcode" />
-    </div>
-    <table class="table table-bordered">
-        <thead class="thead-dark">
-            <tr>
-                <th>Client Id</th>
-                <th>BarCode</th>
-                <th>Date</th>
-                <th>TicketId</th>
+    <div class="row bg-light">
+        <label for="Description"></label>
+        <div class="text-center p-3 mb-3">
+            <label>Enter client barcode!</label>
+            <input type="text" id="Description" class="form-control" @bind="@FilterBarcode" />
+        </div>
+        <table class="table table-bordered">
+            <thead class="thead-dark">
+                <tr>
+                    <th>Client Id</th>
+                    <th>BarCode</th>
+                    <th>Date</th>
+                    <th>TicketId</th>
 
-            </tr>
-        </thead>
-        <tbody>
-            @if (Entries.Any())
-            {
-                @if (FilterBarcode == "")
+                </tr>
+            </thead>
+            <tbody>
+                @if (Entries.Any())
                 {
-                    @foreach (var entrie in Entries)
+                    @if (FilterBarcode == "")
                     {
-                        <tr>
-                            <td>@entrie.ClientId</td>
-                            <td>@entrie.Barcode</td>
-                            <td>@entrie.Date</td>
-                            <td>@entrie.TicketId</td>
-
-                        </tr>
-                    }
-
-
-
-                }
-                else
-                {
-                    @foreach (var entrie in Entries)
-                        @if (entrie.Barcode == FilterBarcode)
+                        @foreach (var entrie in Entries)
                         {
-                            {
-                        <tr>
-                            <td>@entrie.ClientId</td>
-                            <td>@entrie.Barcode</td>
-                            <td>@entrie.Date</td>
-                            <td>@entrie.TicketId</td>
+                            <tr>
+                                <td>@entrie.ClientId</td>
+                                <td>@entrie.Barcode</td>
+                                <td>@entrie.Date</td>
+                                <td>@entrie.TicketId</td>
 
-                        </tr>
-                                    }
-                                }
+                            </tr>
                         }
-            }
-        </tbody>
-    </table>
-</div>
+
+
+
+                    }
+                    else
+                    {
+                        @foreach (var entrie in Entries)
+                            @if (entrie.Barcode == FilterBarcode)
+                            {
+                                {
+                                    <tr>
+                                        <td>@entrie.ClientId</td>
+                                        <td>@entrie.Barcode</td>
+                                        <td>@entrie.Date</td>
+                                        <td>@entrie.TicketId</td>
+
+                                    </tr>
+                                }
+                            }
+                        }
+                }
+            </tbody>
+        </table>
+    </div>
 }
 
 @if (barcode.IsAdmin && SelectedFilter == "client")
@@ -166,18 +172,18 @@
             <tbody>
                 @if (Tickets.Any())
                 {
-                    @if (SelectedTicketID==0)
+                    @if (SelectedTicketID == 0)
                     {@foreach (var ticket in Tickets)
-                        
-                            {
-                                <tr>
-                                    <td>@ticket.ClientId</td>
-                                    <td>@ticket.Barcode</td>
+
+                        {
+                            <tr>
+                                <td>@ticket.ClientId</td>
+                                <td>@ticket.Barcode</td>
 
 
-                                </tr>
-                            
-                    } 
+                            </tr>
+
+                        }
                 }
                 else
                 {
@@ -196,7 +202,7 @@
 
                 }
 
-        }
+                }
             </tbody>
         </table>
     </div>
