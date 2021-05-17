@@ -24,11 +24,23 @@
                     }
                 </select>
             </div>
+   
+
+            <MatDialog @bind-IsOpen="@dialogIsOpen">
+                <MatDialogTitle>Hi @barcode.Code</MatDialogTitle>
+                <MatDialogContent>
+                    
+                   
+                        <p>Enter the gym!</p>
+                        <label for="Description">@Succes</label>
+                   
+                </MatDialogContent>
+                <MatDialogActions>
+                    <MatButton OnClick="@(e => { dialogIsOpen = false; })">Ok</MatButton>
+                </MatDialogActions>
+            </MatDialog>
             <div class="text-center p-3 mb-3">
                 <button class="btn btn-info" @onclick="Login"> Enter</button>
-            </div>
-            <div class="text-center p-3 mb-3">
-                <label for="Description">Succes: @Succes</label>
             </div>
             <table class="table table-bordered">
                 <thead class="thead-dark">
@@ -121,9 +133,11 @@ else
     }
     private async Task Login()
     {
+        dialogIsOpen = true;
 
         await UpdateClientTicketData();
         await RefreshClientTickets();
+
     }
 
     private async Task RefreshClients()
@@ -173,6 +187,7 @@ else
     private async Task AddNewEntries()
     {
 
+
         foreach (var client in Clients)
         {
             if (client.Barcode == barcode.Code)
@@ -210,7 +225,7 @@ else
                 UpdateClientTicket = clientTicket;
                 if (UpdateClientTicket.Entries < GetValidIntervall(UpdateClientTicket.TicketId) && UpdateClientTicket.Valid==true)
                 {
-                    
+
                     UpdateClientTicket.Entries += 1;
                     Succes = "Succes";
                     await AddNewEntries();
@@ -223,5 +238,17 @@ else
         }
         await service.UpdateClientTicketsAsync(UpdateClientTicket);
 
+    }
+    bool dialogIsOpen = false;
+
+    void OpenDialog()
+    {
+        dialogIsOpen = true;
+    }
+
+    void OkClick()
+    {
+
+        dialogIsOpen = false;
     }
 }

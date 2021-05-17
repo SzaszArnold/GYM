@@ -4,167 +4,181 @@
 @inject Data.Models.BarCode barcode
 @if (barcode.IsAdmin)
 {<div class="container">
-    <div class="row bg-light">
-        <div class="col-5 bg-light m-2 justify-content-start">
-            <div class="p-3 mb-3 bg-primary text-white text-center">Add New Client Ticket</div>
-            <div class="text-center p-3 mb-3">
-                <label>Select ticket type:</label>
-                <select class="form-control" @bind="@SelectedTicketID">
+        <div class="row bg-light">
+            <div class="col-5 bg-light m-2 justify-content-start">
+                <div class="p-3 mb-3 bg-primary text-white text-center">Add New Client Ticket</div>
+                <div class="text-center p-3 mb-3">
+                    <label>Select ticket type:</label>
+                    <select class="form-control" @bind="@SelectedTicketID">
+                        @foreach (var ticket in SeasonTickets)
+                        {
+                            <option value="@ticket.TicketId"> @ticket.Name </option>
+                        }
+                        }
+                        }
+                    </select>
+                </div>
+                <EditForm Model="@NewTicket">
+                    <div class="form-group">
+                        <label for="name">Client bar code</label>
+                        <input type="text" id="name" class="form-control" @bind="@BarCode" />
+                    </div>
+                    <div class="text-center p-3 mb-3">
+                        <p>
+                            <MatDatePicker @bind-Value="@Date1"></MatDatePicker>
+                        </p>
+                        <MatButton OnClick="@(_ =>
+                              {
+                                  Date1 = null;
+                              })">
+                            Empty
+                        </MatButton>
+                    </div>
+                    <div class="text-center p-3 mb-3">
+                        <button class="btn btn-info" @onclick="AddNewTicket"> Add Ticket</button>
+                    </div>
+
+
+                </EditForm>
+
+            </div>
+
+        </div>
+        <div class="row bg-light">
+            <label for="Description"></label>
+            <table class="table table-bordered">
+                <thead class="thead-dark">
+                    <tr>
+                        <th>Name</th>
+                        <th>Price</th>
+                        <th>ValidENtries</th>
+                        <th>Delete</th>
+                    </tr>
+                </thead>
+                <tbody>
                     @foreach (var ticket in SeasonTickets)
                     {
-                        <option value="@ticket.TicketId"> @ticket.Name </option>
+                        {
+                            <tr @onclick="(() => SetSeasonTicketForUpdate(ticket))">
+                                <td>@ticket.Name</td>
+                                <td>@ticket.Price</td>
+                                <td>@ticket.ValidEntries</td>
+                                <td><button class="btn btn-danger" @onclick="(() => DeleteTicket(ticket))">Delete</button></td>
+                            </tr>
+                        }
                     }
-                    }
-                    }
-                </select>
+                </tbody>
+            </table>
+        </div>
+        <div class="row m-5">
+            <div class="col-5 bg-light m-2 justify-content-start">
+
+                <div class="p-3 mb-3 bg-primary text-white text-center">Add New Ticket Type</div>
+
+                <EditForm Model="@NewTicketType">
+                    <div class="form-group">
+                        <label for="name">Ticket Name</label>
+                        <input type="text" id="name" class="form-control" @bind="@NewTicketType.Name" />
+                    </div>
+
+                    <div class="form-group">
+                        <label for="price">Price</label>
+                        <input type="text" id="price" class="form-control" @bind="@NewTicketType.Price" />
+                    </div>
+
+                    <div class="form-group">
+                        <label for="quantity">Valid Entries</label>
+                        <input type="text" id="quantity" class="form-control" @bind="@NewTicketType.ValidEntries" />
+                    </div>
+
+                    <div class="text-center p-3 mb-3">
+                        <button class="btn btn-info" @onclick="AddNewSeasonTicket"> Add New Ticket</button>
+                    </div>
+                </EditForm>
             </div>
-            <EditForm Model="@NewTicket">
-                <div class="form-group">
-                    <label for="name">Client bar code</label>
-                    <input type="text" id="name" class="form-control" @bind="@BarCode" />
-                </div>
-                <div class="text-center p-3 mb-3">
-                    <button class="btn btn-info" @onclick="AddNewTicket"> Add Ticket</button>
-                </div>
-            </EditForm>
+
+            <div class="col-5 bg-light m-2 justify-content-end">
+                <div class="p-3 mb-1 bg-primary text-white text-center">Update Ticket</div>
+
+                <EditForm Model="@UpdateSeasonTicket">
+                    <div class="form-group">
+                        <label for="name">Ticket Name</label>
+                        <input type="text" id="name" class="form-control" @bind="@UpdateSeasonTicket.Name" />
+                    </div>
+
+                    <div class="form-group">
+                        <label for="price">Price</label>
+                        <input type="text" id="price" class="form-control" @bind="@UpdateSeasonTicket.Price" />
+                    </div>
+
+                    <div class="form-group">
+                        <label for="quantity">Valid Entries</label>
+                        <input type="text" id="quantity" class="form-control" @bind="@UpdateSeasonTicket.ValidEntries" />
+                    </div>
+
+
+                    <div class="text-center p-3 mb-3">
+                        <button class="btn btn-info" @onclick="UpdateClientData"> Update Ticket</button>
+                    </div>
+                </EditForm>
+            </div>
 
         </div>
+        <div class="row bg-light">
+            <label for="Description"></label>
+            <table class="table table-bordered">
+                <thead class="thead-dark">
+                    <tr>
+                        <th>ClientId</th>
+                        <th>TicketId</th>
+                        <th>Bought</th>
+                        <th>BarCode</th>
+                        <th>Entries</th>
+                        <th>Price</th>
+                        <th>Valid</th>
+                        <th>FirstUse</th>
+                        <th>GymId</th>
+                        <th>Suspend</th>
 
-    </div>
-    <div class="row bg-light">
-        <label for="Description"></label>
-        <table class="table table-bordered">
-            <thead class="thead-dark">
-                <tr>
-                    <th>Name</th>
-                    <th>Price</th>
-                    <th>ValidENtries</th>
-                    <th>Delete</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var ticket in SeasonTickets)
-                {
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var ticket in Tickets)
                     {
-                        <tr @onclick="(() => SetSeasonTicketForUpdate(ticket))">
-                            <td>@ticket.Name</td>
-                            <td>@ticket.Price</td>
-                            <td>@ticket.ValidEntries</td>
-                            <td><button class="btn btn-danger" @onclick="(() => DeleteTicket(ticket))">Delete</button></td>
-                        </tr>
+                        {
+                            <tr>
+                                <td>@ticket.ClientId</td>
+                                <td>@ticket.TicketId</td>
+                                <td>@ticket.Bought</td>
+                                <td>@ticket.Barcode</td>
+                                <td>@ticket.Entries</td>
+                                <td>@ticket.Price</td>
+                                <td>@ticket.Valid</td>
+                                <td>@ticket.FirstUse</td>
+                                <td>@ticket.GymId</td>
+                                @if (ticket.Valid == true)
+                                {
+                                    <td><button class="btn btn-danger" @onclick="(() => SuspendTicket(ticket))">Suspend</button></td>
+                                }
+                                else
+                                {
+                                    <td><button class="btn btn-outline-success" @onclick="(() => SuspendTicket(ticket))">Validate</button></td>
+                                }
+                            </tr>
+                        }
                     }
-                }
-            </tbody>
-        </table>
-    </div>
-    <div class="row m-5">
-        <div class="col-5 bg-light m-2 justify-content-start">
-
-            <div class="p-3 mb-3 bg-primary text-white text-center">Add New Ticket Type</div>
-
-            <EditForm Model="@NewTicketType">
-                <div class="form-group">
-                    <label for="name">Ticket Name</label>
-                    <input type="text" id="name" class="form-control" @bind="@NewTicketType.Name" />
-                </div>
-
-                <div class="form-group">
-                    <label for="price">Price</label>
-                    <input type="text" id="price" class="form-control" @bind="@NewTicketType.Price" />
-                </div>
-
-                <div class="form-group">
-                    <label for="quantity">Valid Entries</label>
-                    <input type="text" id="quantity" class="form-control" @bind="@NewTicketType.ValidEntries" />
-                </div>
-
-                <div class="text-center p-3 mb-3">
-                    <button class="btn btn-info" @onclick="AddNewSeasonTicket"> Add New Ticket</button>
-                </div>
-            </EditForm>
+                </tbody>
+            </table>
         </div>
-
-        <div class="col-5 bg-light m-2 justify-content-end">
-            <div class="p-3 mb-1 bg-primary text-white text-center">Update Ticket</div>
-
-            <EditForm Model="@UpdateSeasonTicket">
-                <div class="form-group">
-                    <label for="name">Ticket Name</label>
-                    <input type="text" id="name" class="form-control" @bind="@UpdateSeasonTicket.Name" />
-                </div>
-
-                <div class="form-group">
-                    <label for="price">Price</label>
-                    <input type="text" id="price" class="form-control" @bind="@UpdateSeasonTicket.Price" />
-                </div>
-
-                <div class="form-group">
-                    <label for="quantity">Valid Entries</label>
-                    <input type="text" id="quantity" class="form-control" @bind="@UpdateSeasonTicket.ValidEntries" />
-                </div>
-
-
-                <div class="text-center p-3 mb-3">
-                    <button class="btn btn-info" @onclick="UpdateClientData"> Update Ticket</button>
-                </div>
-            </EditForm>
-        </div>
-
     </div>
-    <div class="row bg-light">
-        <label for="Description"></label>
-        <table class="table table-bordered">
-            <thead class="thead-dark">
-                <tr>
-                    <th>ClientId</th>
-                    <th>TicketId</th>
-                    <th>Bought</th>
-                    <th>BarCode</th>
-                    <th>Entries</th>
-                    <th>Price</th>
-                    <th>Valid</th>
-                    <th>FirstUse</th>
-                    <th>GymId</th>
-                    <th>Suspend</th>
-
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var ticket in Tickets)
-                {
-                    {
-                        <tr>
-                            <td>@ticket.ClientId</td>
-                            <td>@ticket.TicketId</td>
-                            <td>@ticket.Bought</td>
-                            <td>@ticket.Barcode</td>
-                            <td>@ticket.Entries</td>
-                            <td>@ticket.Price</td>
-                            <td>@ticket.Valid</td>
-                            <td>@ticket.FirstUse</td>
-                            <td>@ticket.GymId</td>
-                            @if (ticket.Valid == true)
-                            {
-                                <td><button class="btn btn-danger" @onclick="(() => SuspendTicket(ticket))">Suspend</button></td>
-                            }
-                            else
-                            {
-                                <td><button class="btn btn-outline-success" @onclick="(() => SuspendTicket(ticket))">Validate</button></td>
-                            }
-                        </tr>
-                    }
-                }
-            </tbody>
-        </table>
-    </div>
-</div>
 }
-else 
+else
 {
     <p>No Permission!</p>
 }
 
 @code {
+    public DateTime? Date1 { get; set; } = DateTime.Now.AddDays(-10);
     int SelectedTicketID { get; set; }
     List<Data.Models.Client> Clients = new List<Data.Models.Client>();
     List<Data.Models.ClientTickets> Tickets = new List<Data.Models.ClientTickets>();
@@ -201,7 +215,7 @@ else
                 NewTicket.Entries = 0;
                 NewTicket.TicketId = SelectedTicketID;
                 NewTicket.Barcode = BarCode;
-
+                NewTicket.FirstUse = Date1.Value;
                 NewTicket.Valid = true;
                 NewTicket.Bought = DateTime.Now;
                 NewTicket.GymId = 1001;
@@ -212,7 +226,8 @@ else
         }
     }
     private async Task SuspendTicket(Data.Models.ClientTickets ticket)
-    {if (ticket.Valid == true)
+    {
+        if (ticket.Valid == true)
             ticket.Valid = false;
         else
             ticket.Valid = true;

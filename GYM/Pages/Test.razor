@@ -1,16 +1,23 @@
 ﻿
 @page "/test"
+@using MatBlazor
 
-<button @onclick="@(() => ShowDialog())" class="btn btn-primary">Show more</button>
-@code
+<MatFileUpload OnChange="@FilesReady" Label="Drop a single file here or Browse"></MatFileUpload>
+
+@foreach (var f in list)
 {
-    [CascadingParameter]
-    public IModalService Modal { get; set; }
+    <div>@f</div>
+}
 
-    void ShowDialog()
+@code
+        {
+    List<string> list = new List<string>();
+
+    void FilesReady(IMatFileUploadEntry[] files)
     {
-        var parameters = new ModalParameters();
-        parameters.Add("MovieId", 55);
-        Modal.Show<LoginState>("Test",parameters);
+        foreach (var file in files)
+        {
+            list.Add($"Name: {file.Name} - Size: {file.Size} ");
+        }
     }
 }

@@ -6,7 +6,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Blazored.Modal;
-using Syncfusion.Blazor;
+using MatBlazor;
 
 namespace GYM
 {
@@ -32,14 +32,14 @@ namespace GYM
             });
             services.AddScoped<GymServices>();
             services.AddBlazoredModal();
-            services.AddSyncfusionBlazor();
-         
+            services.AddMatBlazor();
+
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense("NDQ2ODA1QDMxMzkyZTMxMmUzMGljZmRPeUhxWkJZeDc2SEhrekttREZ6MG1ZYzFXUjJGUUVDOEh0MlZSVzg9");
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
