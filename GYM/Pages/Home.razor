@@ -5,19 +5,19 @@
 @if (barcode.Code != "")
 {
     <div class="container">
-        <div class="row bg-light">
+        <div class="row table-light">
             <div class="text-center p-3 mb-3">
-                <label for="Description">Bar Code: @barcode.Code</label>
+                <label style="font-size:20px;" for="Description">Bar Code: @barcode.Code</label>
             </div>
             <div class="text-center p-3 mb-3">
-                <label for="Description">Select a ticket.</label>
+                <label style="font-size:20px;" for="Description">Select a ticket.</label>
             </div>
             <div class="text-center p-3 mb-3">
                 <select class="form-control" @bind="@SelectedTicketID">
                     @foreach (var clientTicket in ClientTickets)
                     {@if (clientTicket.Barcode == barcode.Code)
                         {
-                            <option value="@clientTicket.TicketId"> @GetTicketName(clientTicket.TicketId) </option>
+                            <option  style="font-size:20px;" value="@clientTicket.TicketId"> @GetTicketName(clientTicket.TicketId) </option>
                         }
                 }
                     }
@@ -25,10 +25,9 @@
                 </select>
             </div>
             <MatDialog @bind-IsOpen="@dialogIsOpen">
-                <MatDialogTitle>Hi @barcode.Code</MatDialogTitle>
+                <MatDialogTitle style="font-size:20px;">Hi @barcode.Code</MatDialogTitle>
                 <MatDialogContent>
-                        <p>Enter the gym!</p>
-                        <label for="Description">@Succes</label>                 
+                        <label style="font-size:20px;" for="Description">@Succes</label>                 
                 </MatDialogContent>
                 <MatDialogActions>
                     <MatButton OnClick="@(e => { dialogIsOpen = false; })">Ok</MatButton>
@@ -38,12 +37,11 @@
                 <button class="btn btn-info" @onclick="Login"> Enter</button>
             </div>
             <table class="table table-bordered">
-                <thead class="thead-dark">
+                <thead class="thead-light">
                     <tr>
                         <th>Name</th>
                         <th>Phone</th>
                         <th>Email</th>
-                        <th>IsDeleted</th>
                         <th>Photo</th>
                         <th>InsertDate</th>
                         <th>IDCard</th>
@@ -62,7 +60,6 @@
                                     <td>@client.Name</td>
                                     <td>@client.Phone</td>
                                     <td>@client.Email</td>
-                                    <td>@client.IsDeleted</td>
                                     <td><img src="https://cdn4.iconfinder.com/data/icons/e-commerce-181/512/477_profile__avatar__man_-512.png" alt="Profile" width="50" height="50"></td>
                                     <td>@client.InsertDate</td>
                                     <td>@client.IDCard</td>
@@ -76,8 +73,9 @@
 
                 </tbody>
             </table>
+            <h3>Ticket details</h3>
             <table class="table table-bordered">
-                <thead class="thead-dark">
+                <thead class="thead-light">
                     <tr>
                         <th>Name</th>
                         <th>Bought</th>
@@ -222,7 +220,7 @@ else
                 {
 
                     UpdateClientTicket.Entries += 1;
-                    Succes = "Succes";
+                    Succes = "Commit to be Fit.";
                     await AddNewEntries();
                 }
                 else

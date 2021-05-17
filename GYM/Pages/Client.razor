@@ -12,7 +12,7 @@
         <label></label>
         <div class="row bg-light">
             <table class="table table-bordered">
-                <thead class="thead-dark">
+                <thead class="thead-light">
                     <tr>
                         <th>Client Id</th>
                         <th>Name</th>
@@ -61,6 +61,7 @@
                 <MatDialogTitle>Add New Client</MatDialogTitle>
                 <MatDialogContent>
                     <EditForm Model="@NewClient">
+                        
                         <div class="form-group">
                             <label for="name">Client Name</label>
                             <input type="text" id="name" class="form-control" @bind-value="@NewClient.Name" />

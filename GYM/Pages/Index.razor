@@ -1,9 +1,10 @@
 ﻿@page "/"
 @inject Data.Models.BarCode barcode
 @inject Data.Database.GymServices service
-
-<div class="container" >
-    <div class="row bg-light text-center">
+<h1  class="center">Welcome!</h1>
+<h2 class="center">Please scan your card! </h2>
+<div class="center" >
+    <div class="row text-center">
         <div class="text-center p-3 mb-3" >
             <label for="Description">Bar Code</label>
         </div>
@@ -24,6 +25,7 @@
         await RefreshClients();
 
 
+
     }
 
     private async Task RefreshClients()
@@ -35,8 +37,13 @@
         if (barcode.Code == Clients[0].Barcode)
         {
             barcode.IsAdmin = true;
+           
         }
-        else { barcode.IsAdmin = false; }
+        else
+        {
+            barcode.IsAdmin = false;
+           
+        }
         return true;
 
     }

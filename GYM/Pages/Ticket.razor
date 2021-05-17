@@ -5,8 +5,8 @@
 @if (barcode.IsAdmin)
 {<div class="container">
         <div class="row bg-light">
-            <div class="col-5 bg-light m-2 justify-content-start">
-                <div class="p-3 mb-3 bg-primary text-white text-center">Add New Client Ticket</div>
+            <div class="col-5 bg-light m-2 justify-content-center">
+                <div class="p-3 mb-3 text-white text-center" style="background-color: #05173D;">Add New Client Ticket</div>
                 <div class="text-center p-3 mb-3">
                     <label>Select ticket type:</label>
                     <select class="form-control" @bind="@SelectedTicketID">
@@ -37,17 +37,14 @@
                     <div class="text-center p-3 mb-3">
                         <button class="btn btn-info" @onclick="AddNewTicket"> Add Ticket</button>
                     </div>
-
-
                 </EditForm>
-
             </div>
-
         </div>
+    <h3 style="color:cornflowerblue;">Ticket types</h3>
         <div class="row bg-light">
             <label for="Description"></label>
             <table class="table table-bordered">
-                <thead class="thead-dark">
+                <thead class="thead-light">
                     <tr>
                         <th>Name</th>
                         <th>Price</th>
@@ -73,7 +70,7 @@
         <div class="row m-5">
             <div class="col-5 bg-light m-2 justify-content-start">
 
-                <div class="p-3 mb-3 bg-primary text-white text-center">Add New Ticket Type</div>
+                <div class="p-3 mb-3 text-white text-center"  style="background-color: #05173D;">Add New Ticket Type</div>
 
                 <EditForm Model="@NewTicketType">
                     <div class="form-group">
@@ -98,7 +95,7 @@
             </div>
 
             <div class="col-5 bg-light m-2 justify-content-end">
-                <div class="p-3 mb-1 bg-primary text-white text-center">Update Ticket</div>
+                <div class="p-3 mb-1 text-white text-center"  style="background-color: #05173D;">Update Ticket</div>
 
                 <EditForm Model="@UpdateSeasonTicket">
                     <div class="form-group">
@@ -124,20 +121,22 @@
             </div>
 
         </div>
+    <h3 style="color:cornflowerblue;">Current tickets</h3>
         <div class="row bg-light">
             <label for="Description"></label>
             <table class="table table-bordered">
-                <thead class="thead-dark">
+                <thead class="thead-light">
                     <tr>
                         <th>ClientId</th>
                         <th>TicketId</th>
+                        <th>Name</th>
                         <th>Bought</th>
                         <th>BarCode</th>
                         <th>Entries</th>
                         <th>Price</th>
                         <th>Valid</th>
                         <th>FirstUse</th>
-                        <th>GymId</th>
+                        <th>Gym</th>
                         <th>Suspend</th>
 
                     </tr>
@@ -146,30 +145,68 @@
                     @foreach (var ticket in Tickets)
                     {
                         {
-                            <tr>
-                                <td>@ticket.ClientId</td>
-                                <td>@ticket.TicketId</td>
-                                <td>@ticket.Bought</td>
-                                <td>@ticket.Barcode</td>
-                                <td>@ticket.Entries</td>
-                                <td>@ticket.Price</td>
-                                <td>@ticket.Valid</td>
-                                <td>@ticket.FirstUse</td>
-                                <td>@ticket.GymId</td>
-                                @if (ticket.Valid == true)
-                                {
-                                    <td><button class="btn btn-danger" @onclick="(() => SuspendTicket(ticket))">Suspend</button></td>
-                                }
-                                else
-                                {
-                                    <td><button class="btn btn-outline-success" @onclick="(() => SuspendTicket(ticket))">Validate</button></td>
-                                }
-                            </tr>
+                    <tr>
+                        <td>@ticket.ClientId</td>
+                        <td>@ticket.TicketId</td>
+                        <td>@GetTicketName(ticket.TicketId)</td>
+                        <td>@ticket.Bought</td>
+                        <td>@ticket.Barcode</td>
+                        <td>@ticket.Entries</td>
+                        <td>@ticket.Price</td>
+                        <td>@ticket.Valid</td>
+                        <td>@ticket.FirstUse</td>
+                        <td>@GetGymName(ticket.GymId)</td>
+                        @if (ticket.Valid == true)
+                        {
+                            <td><button class="btn btn-danger" @onclick="(() => SuspendTicket(ticket))">Suspend</button></td>
+                        }
+                        else
+                        {
+                            <td><button class="btn btn-outline-success" @onclick="(() => SuspendTicket(ticket))">Validate</button></td>
+                        }
+                    </tr>
                         }
                     }
                 </tbody>
             </table>
         </div>
+    </div>
+}
+else if (!barcode.IsAdmin)
+{
+    <div class="row bg-light">
+        <label for="Description"></label>
+        <table class="table table-bordered">
+            <thead class="thead-light">
+                <tr>
+                    <th>Name</th>
+                    <th>Bought</th>
+                    <th>BarCode</th>
+                    <th>Entries</th>
+                    <th>Price</th>
+                    <th>Valid</th>
+                    <th>FirstUse</th>
+                    <th>Gym</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var ticket in Tickets)
+                {
+                    if(ticket.Barcode==barcode.Code)
+                    {
+                        <tr><td>@GetTicketName(ticket.TicketId)</td>
+                            <td>@ticket.Bought</td>
+                            <td>@ticket.Barcode</td>
+                            <td>@ticket.Entries</td>
+                            <td>@ticket.Price</td>
+                            <td>@ticket.Valid</td>
+                            <td>@ticket.FirstUse</td>
+                            <td>@GetGymName(ticket.GymId)</td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
     </div>
 }
 else
@@ -181,6 +218,7 @@ else
     public DateTime? Date1 { get; set; } = DateTime.Now.AddDays(-10);
     int SelectedTicketID { get; set; }
     List<Data.Models.Client> Clients = new List<Data.Models.Client>();
+    List<Data.Models.Room> Gym = new List<Data.Models.Room>();
     List<Data.Models.ClientTickets> Tickets = new List<Data.Models.ClientTickets>();
     public String BarCode { get; set; }
     public Data.Models.ClientTickets NewTicket { get; set; } = new Data.Models.ClientTickets();
@@ -203,6 +241,10 @@ else
     private async Task RefreshClientTickets()
     {
         Tickets = await service.GetClientTicketsAsync();
+    }
+    private async Task RefreshGyms()
+    {
+        Gym = await service.GetRoomAsync();
     }
     private async Task AddNewTicket()
     {
@@ -259,5 +301,17 @@ else
     {
         await service.DeleteTicketAsync(ticket);
         await RefreshSeasonTicket();
+    }
+    private string GetTicketName(int ID)
+    {
+        string Name = "";
+        foreach (var ticket in SeasonTickets) { if (ticket.TicketId == ID) { Name = ticket.Name; } }
+        return Name;
+    }
+    private string GetGymName(int ID)
+    {
+        string Name = "";
+        foreach (var gym in Gym) { if (gym.GymId == ID) { Name = gym.Name; } }
+        return Name;
     }
 }

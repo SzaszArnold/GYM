@@ -7,144 +7,166 @@
 
 @if (barcode.IsAdmin)
 {
-<div class="container">
-    <div class="row bg-light">
-        <div class="text-center p-3 mb-3">
-            <label for="Description">Select filter</label>
-        </div>
-        <div class="text-center p-3 mb-3">
-            <select class="form-control" @bind="@SelectedFilter">
+    <div class="container">
+        <div class="row bg-light">
+            <div class="text-center p-3 mb-3">
+                <label style="font-size:20px;" for="Description">Select filter</label>
+            </div>
+            <div class="text-center p-3 mb-3">
+                <select class="form-control" @bind="@SelectedFilter">
 
-                <option value=""> </option>
-                <option value="client">Client </option>
-                <option value="entries">Entries </option>
-                <option value="ticket">Tickets </option>
+                    <option style="font-size:20px;" value=""> </option>
+                    <option style="font-size:20px;" value="client">Client </option>
+                    <option style="font-size:20px;" value="entries">Entries </option>
+                    <option style="font-size:20px;" value="ticket">Tickets </option>
 
 
 
-            </select>
+                </select>
+            </div>
         </div>
     </div>
-</div>
 }
 @if (barcode.IsAdmin && SelectedFilter == "entries")
 {
-    <div class="row bg-light">
-        <label for="Description"></label>
-        <div class="text-center p-3 mb-3">
-            <label>Enter client barcode!</label>
-            <input type="text" id="Description" class="form-control" @bind="@FilterBarcode" />
-        </div>
-        <table class="table table-bordered">
-            <thead class="thead-dark">
-                <tr>
-                    <th>Client Id</th>
-                    <th>BarCode</th>
-                    <th>Date</th>
-                    <th>TicketId</th>
-
-                </tr>
-            </thead>
-            <tbody>
-                @if (Entries.Any())
-                {
-                    @if (FilterBarcode == "")
-                    {
-                        @foreach (var entrie in Entries)
-                        {
-                            <tr>
-                                <td>@entrie.ClientId</td>
-                                <td>@entrie.Barcode</td>
-                                <td>@entrie.Date</td>
-                                <td>@entrie.TicketId</td>
-
-                            </tr>
-                        }
-
-
-
-                    }
-                    else
-                    {
-                        @foreach (var entrie in Entries)
-                            @if (entrie.Barcode == FilterBarcode)
-                            {
-                                {
-                                    <tr>
-                                        <td>@entrie.ClientId</td>
-                                        <td>@entrie.Barcode</td>
-                                        <td>@entrie.Date</td>
-                                        <td>@entrie.TicketId</td>
-
-                                    </tr>
-                                }
-                            }
-                        }
-                }
-            </tbody>
-        </table>
+    <div class="text-center p-3 mb-3">
+        <label style="font-size:20px;">Select ticket type:</label>
+        <select class="form-control" @bind="@SelectedTicketIDEntrie">
+            @foreach (var ticket in SeasonTickets)
+            {
+                <option value="@ticket.TicketId"> @ticket.Name </option>
+            }
+            }
+            }
+        </select>
     </div>
-}
 
-@if (barcode.IsAdmin && SelectedFilter == "client")
-{
-    <div class="row bg-light">
-        <div class="text-center p-3 mb-3">
-            <label>Enter client name!</label>
-            <input type="text" id="Description" class="form-control" @bind="@FilterName" />
-        </div>
-        <label for="Description"></label>
-        <table class="table table-bordered">
-            <thead class="thead-dark">
-                <tr>
-                    <th>Client Id</th>
-                    <th>Name</th>
-                    <th>Barcode</th>
+    <div class="text-center p-3 mb-3">
+        <label style="font-size:20px;">Enter client barcode:</label>
+        <input type="text" id="Description" class="form-control" @bind="@FilterBarcode" />
+    </div>
+    <table class="table table-bordered">
+        <thead class="thead-light">
+            <tr>
+                <th>Client Name</th>
+                <th>BarCode</th>
+                <th>Date</th>
+                <th>Ticket Name</th>
+                <th>Gym</th>
 
-
-                </tr>
-            </thead>
-            <tbody>
-                @if (Clients.Any())
+            </tr>
+        </thead>
+        <tbody>
+            @if (Entries.Any())
+            {
+                @if (FilterBarcode == "")
                 {
-                    @if (FilterName == "")
-                        @foreach (var client in Clients)
+                    @foreach (var entrie in Entries)
+                    {
+                        <tr>
+                            <td>@GetClientName(entrie.ClientId)</td>
+                            <td>@entrie.Barcode</td>
+                            <td>@entrie.Date</td>
+                            <td>@GetTicketName(entrie.TicketId)</td>
+                            <td>@GetGymName(entrie.GymId)</td>
 
-                        {
-                            <tr>
-                                <td>@client.ClientId</td>
-                                <td>@client.Name</td>
-                                <td>@client.Barcode</td>
-
-
-                            </tr>
-                        }
-                        else
-                        {
-                            @foreach (var client in Clients)
-                                @if (client.Name == FilterName)
-                                {
-                                    <tr>
-                                        <td>@client.ClientId</td>
-                                        <td>@client.Name</td>
-                                        <td>@client.Barcode</td>
-
-
-                                    </tr>
-                                }
-
-                            }
+                        </tr>
+                    }
 
 
 
                 }
                 else
                 {
-                    <tr><td colspan="6"><strong>No client available</strong></td></tr>
-                }
-            </tbody>
-        </table>
+                    @foreach (var entrie in Entries)
+                        @if (entrie.Barcode == FilterBarcode && entrie.TicketId == SelectedTicketIDEntrie)
+                        {
+                            {
+                                <tr>
+                                    <td>@GetClientName(entrie.ClientId)</td>
+                                    <td>@entrie.Barcode</td>
+                                    <td>@entrie.Date</td>
+                                    <td>@GetTicketName(entrie.TicketId)</td>
+                                    <td>@GetGymName(entrie.GymId)</td>>
+
+                                </tr>
+                            }
+                        }
+                    }
+            }
+        </tbody>
+    </table>
+
+}
+
+@if (barcode.IsAdmin && SelectedFilter == "client")
+{
+
+    <div class="text-center p-3 mb-3">
+        <label style="font-size:20px;">Enter client name:</label>
+        <input type="text" id="Description" class="form-control" @bind="@FilterName" />
     </div>
+    <label for="Description"></label>
+    <table class="table table-bordered">
+        <thead class="thead-light">
+            <tr>
+                <th>Client Id</th>
+                <th>Name</th>
+                <th>Phone</th>
+                <th>Email</th>
+                <th>Photo</th>
+                <th>InsertDate</th>
+                <th>IdCard</th>
+                <th>Barcode</th>
+                <th>Comment</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Clients.Any())
+            {
+                @if (FilterName == "")
+                    @foreach (var client in Clients)
+
+                    {
+                        <tr>
+                            <td>@client.ClientId</td>
+                            <td>@client.Name</td>
+                            <td>@client.Phone</td>
+                            <td>@client.Email</td>
+                            <td><img src="https://cdn4.iconfinder.com/data/icons/e-commerce-181/512/477_profile__avatar__man_-512.png" alt="Profile" width="50" height="50"></td>
+                            <td>@client.InsertDate</td>
+                            <td>@client.IDCard</td>
+                            <td>@client.Barcode</td>
+                            <td>@client.Comment</td>
+                        </tr>
+                    }
+                    else
+                    {
+                        @foreach (var client in Clients)
+                            @if (client.Name == FilterName)
+                            {
+                                <tr>
+                                    <td>@client.ClientId</td>
+                                    <td>@client.Name</td>
+                                    <td>@client.Phone</td>
+                                    <td>@client.Email</td>
+                                    <td><img src="https://cdn4.iconfinder.com/data/icons/e-commerce-181/512/477_profile__avatar__man_-512.png" alt="Profile" width="50" height="50"></td>
+                                    <td>@client.InsertDate</td>
+                                    <td>@client.IDCard</td>
+                                    <td>@client.Barcode</td>
+                                    <td>@client.Comment</td>
+                                </tr>
+                            }
+
+                        }
+            }
+            else
+            {
+                <tr><td colspan="6"><strong>No client available</strong></td></tr>
+            }
+        </tbody>
+    </table>
+
 }
 
 @if (barcode.IsAdmin && SelectedFilter == "ticket")
@@ -159,146 +181,176 @@
             }
         </select>
     </div>
-    <div class="row bg-light">
-        <label for="Description"></label>
-        <table class="table table-bordered">
-            <thead class="thead-dark">
-                <tr>
-                    <th>Client Id</th>
-                    <th>BarCode</th>
+    <div class="text-center p-3 mb-3">
+        <MatSlideToggle @bind-Value="@Valid" TValue="bool" Label="Valid"></MatSlideToggle>
+        </div>
+        <div class="row bg-light">
+            <label for="Description"></label>
+            <table class="table table-bordered">
+                <thead class="thead-light">
+                    <tr>
+                        <th>Client Name</th>
+                        <th>BarCode</th>
+                        <th>Valid</th>
+                        <th>Gym</th>
 
-                </tr>
-            </thead>
-            <tbody>
-                @if (Tickets.Any())
-                {
-                    @if (SelectedTicketID == 0)
-                    {@foreach (var ticket in Tickets)
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Tickets.Any())
+                    {
+                        @if (SelectedTicketID == 0)
+                        {@foreach (var ticket in Tickets)
 
-                        {
-                            <tr>
-                                <td>@ticket.ClientId</td>
-                                <td>@ticket.Barcode</td>
+                            {
+                                <tr>
+                                    <td>@GetClientName(ticket.ClientId)</td>
+                                    <td>@ticket.Barcode</td>
+                                    <td>@ticket.Valid</td>
+                                    <td>@GetGymName(ticket.GymId)</td>
+                                </tr>
 
-
-                            </tr>
-
-                        }
-                }
-                else
-                {
-                    @foreach (var ticket in Tickets)
-                    {@if (ticket.TicketId == SelectedTicketID)
-                        {
-                            <tr>
-                                <td>@ticket.ClientId</td>
-                                <td>@ticket.Barcode</td>
-
-
-                            </tr>
-                        }
-                }
-
-
-                }
-
-                }
-            </tbody>
-        </table>
-    </div>
-}
+                            }
+                    }
+                    else
+                    {
+                        @foreach (var ticket in Tickets)
+                        {@if (ticket.TicketId == SelectedTicketID && ticket.Valid == Valid)
+                            {
+                                <tr>
+                                    <td>@GetClientName(ticket.ClientId)</td>
+                                    <td>@ticket.Barcode</td>
+                                    <td>@ticket.Valid</td>
+                                    <td>@GetGymName(ticket.GymId)</td>
+                                </tr>
+                            }
+                    }
 
 
+                    }
 
-@code {
-    public String BarCode { get; set; }
-    public String SelectedFilter { get; set; }
-    public String FilterName { get; set; }
-    public String FilterBarcode { get; set; }
-    public int SelectedTicketID { get; set; }
-    List<Data.Models.SeasonTicket> SeasonTickets = new List<Data.Models.SeasonTicket>();
-    List<Data.Models.Client> Clients = new List<Data.Models.Client>();
-    List<Data.Models.Entries> Entries = new List<Data.Models.Entries>();
-    List<Data.Models.ClientTickets> Tickets = new List<Data.Models.ClientTickets>();
-    protected override async Task OnInitializedAsync()
-    {
-        await Refresh();
-        FilterName = "";
-        SelectedTicketID = 0;
-        FilterBarcode = "";
-    }
-
-    private async Task Refresh()
-    {
-
-        await RefreshClients();
-        await RefreshEntries();
-        await RefreshTickets();
-        await RefreshSeasonTicket();
-
-
-    }
-
-    private async Task RefreshClients()
-    {
-        Clients = await service.GetClientAsync();
-    }
-    private async Task RefreshEntries()
-    {
-        Entries = await service.GetEntriesAsync();
-    }
-    private async Task RefreshTickets()
-    {
-        Tickets = await service.GetClientTicketsAsync();
-    }
-    private async Task RefreshSeasonTicket()
-    {
-        SeasonTickets = await service.GetTicketAsync();
-    }
-
-    public Data.Models.Client NewClient { get; set; } = new Data.Models.Client();
-    private async Task AddNewClient()
-    {
-        await service.AddClientAsync(NewClient);
-        NewClient = new Data.Models.Client();
-        await RefreshClients();
-    }
-
-    Data.Models.Client UpdateClient = new Data.Models.Client();
-    private void SetClientForUpdate(Data.Models.Client client)
-    {
-        UpdateClient = client;
-    }
-
-    private async Task UpdateClientData()
-    {
-        await service.UpdateClientAsync(UpdateClient);
-        await RefreshClients();
-    }
-
-    private async Task DeleteClient(Data.Models.Client client)
-    {
-        await service.DeleteClientAsync(client);
-        await RefreshClients();
-    }
-
-    public Data.Models.Entries NewEntries { get; set; } = new Data.Models.Entries();
-    private async Task AddNewEntries()
-    {
-
-        foreach (var client in Clients)
-        {
-            if (client.Barcode == BarCode)
-            {
-                NewEntries.ClientId = client.ClientId;
-                NewEntries.Barcode = BarCode;
-                NewEntries.GymId = 1001;
-                NewEntries.Date = DateTime.Now;
-            }
+                    }
+                </tbody>
+            </table>
+        </div>
         }
 
-        await service.AddEntriesAsync(NewEntries);
 
-    }
 
-}
+        @code {
+    public String BarCode { get; set; }
+        public String SelectedFilter { get; set; }
+        public String FilterName { get; set; }
+        public String FilterBarcode { get; set; }
+        public int SelectedTicketID { get; set; }
+        public int SelectedTicketIDEntrie { get; set; }
+        public bool Valid { get; set; }
+        List<Data.Models.SeasonTicket> SeasonTickets = new List<Data.Models.SeasonTicket>();
+        List<Data.Models.Client> Clients = new List<Data.Models.Client>();
+        List<Data.Models.Entries> Entries = new List<Data.Models.Entries>();
+        List<Data.Models.Room> Gym = new List<Data.Models.Room>();
+        List<Data.Models.ClientTickets> Tickets = new List<Data.Models.ClientTickets>();
+        protected override async Task OnInitializedAsync()
+        {
+            await Refresh();
+            FilterName = "";
+            SelectedTicketID = 0;
+            FilterBarcode = "";
+        }
+
+        private async Task Refresh()
+        {
+
+            await RefreshClients();
+            await RefreshEntries();
+            await RefreshTickets();
+            await RefreshSeasonTicket();
+            await RefreshGyms();
+
+        }
+
+        private async Task RefreshClients()
+        {
+            Clients = await service.GetClientAsync();
+        }
+        private async Task RefreshEntries()
+        {
+            Entries = await service.GetEntriesAsync();
+        }
+        private async Task RefreshTickets()
+        {
+            Tickets = await service.GetClientTicketsAsync();
+        }
+        private async Task RefreshSeasonTicket()
+        {
+            SeasonTickets = await service.GetTicketAsync();
+        }
+        private async Task RefreshGyms()
+        {
+            Gym = await service.GetRoomAsync();
+        }
+
+        public Data.Models.Client NewClient { get; set; } = new Data.Models.Client();
+        private async Task AddNewClient()
+        {
+            await service.AddClientAsync(NewClient);
+            NewClient = new Data.Models.Client();
+            await RefreshClients();
+        }
+
+        Data.Models.Client UpdateClient = new Data.Models.Client();
+        private void SetClientForUpdate(Data.Models.Client client)
+        {
+            UpdateClient = client;
+        }
+
+        private async Task UpdateClientData()
+        {
+            await service.UpdateClientAsync(UpdateClient);
+            await RefreshClients();
+        }
+
+        private async Task DeleteClient(Data.Models.Client client)
+        {
+            await service.DeleteClientAsync(client);
+            await RefreshClients();
+        }
+
+        public Data.Models.Entries NewEntries { get; set; } = new Data.Models.Entries();
+        private async Task AddNewEntries()
+        {
+
+            foreach (var client in Clients)
+            {
+                if (client.Barcode == BarCode)
+                {
+                    NewEntries.ClientId = client.ClientId;
+                    NewEntries.Barcode = BarCode;
+                    NewEntries.GymId = 1001;
+                    NewEntries.Date = DateTime.Now;
+                }
+            }
+
+            await service.AddEntriesAsync(NewEntries);
+
+        }
+        private string GetTicketName(int ID)
+        {
+            string Name = "";
+            foreach (var ticket in SeasonTickets) { if (ticket.TicketId == ID) { Name = ticket.Name; } }
+            return Name;
+        }
+        private string GetGymName(int ID)
+        {
+            string Name = "";
+            foreach (var gym in Gym) { if (gym.GymId == ID) { Name = gym.Name; } }
+            return Name;
+        }
+
+        private string GetClientName(int ID)
+        {
+            string Name = "";
+            foreach (var client in Clients) { if (client.ClientId == ID) { Name = client.Name; } }
+            return Name;
+        }
+        }
