@@ -216,7 +216,7 @@ else
             if (clientTicket.TicketId == SelectedTicketID && clientTicket.Barcode == barcode.Code)
             {
                 UpdateClientTicket = clientTicket;
-                if (UpdateClientTicket.Entries < GetValidIntervall(UpdateClientTicket.TicketId) && UpdateClientTicket.Valid==true && UpdateClientTicket.FirstUse>=DateTime.Now)
+                if (UpdateClientTicket.Entries < GetValidIntervall(UpdateClientTicket.TicketId) && UpdateClientTicket.Valid==true )
                 {
 
                     UpdateClientTicket.Entries += 1;
