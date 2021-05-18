@@ -3,7 +3,7 @@
 @inject Data.Models.BarCode barcode
 
 @if (!barcode.IsAdmin)
-{<p>No permission!</p>}
+{<p>No Permission!</p>}
 
 @if (barcode.IsAdmin)
 {
@@ -32,11 +32,8 @@
             {
                 <option value="@ticket.TicketId"> @ticket.Name </option>
             }
-            }
-            }
         </select>
     </div>
-
     <div class="text-center p-3 mb-3">
         <label style="font-size:20px;">Enter client barcode:</label>
         <input type="text" id="Description" class="form-control" @bind="@FilterBarcode" />
@@ -80,7 +77,7 @@
                                     <td>@entrie.Barcode</td>
                                     <td>@entrie.Date</td>
                                     <td>@GetTicketName(entrie.TicketId)</td>
-                                    <td>@GetGymName(entrie.GymId)</td>>
+                                    <td>@GetGymName(entrie.GymId)</td>
 
                                 </tr>
                             }
@@ -282,51 +279,6 @@
     private async Task RefreshGyms()
     {
         Gym = await service.GetRoomAsync();
-    }
-
-    public Data.Models.Client NewClient { get; set; } = new Data.Models.Client();
-    private async Task AddNewClient()
-    {
-        await service.AddClientAsync(NewClient);
-        NewClient = new Data.Models.Client();
-        await RefreshClients();
-    }
-
-    Data.Models.Client UpdateClient = new Data.Models.Client();
-    private void SetClientForUpdate(Data.Models.Client client)
-    {
-        UpdateClient = client;
-    }
-
-    private async Task UpdateClientData()
-    {
-        await service.UpdateClientAsync(UpdateClient);
-        await RefreshClients();
-    }
-
-    private async Task DeleteClient(Data.Models.Client client)
-    {
-        await service.DeleteClientAsync(client);
-        await RefreshClients();
-    }
-
-    public Data.Models.Entries NewEntries { get; set; } = new Data.Models.Entries();
-    private async Task AddNewEntries()
-    {
-
-        foreach (var client in Clients)
-        {
-            if (client.Barcode == BarCode)
-            {
-                NewEntries.ClientId = client.ClientId;
-                NewEntries.Barcode = BarCode;
-                NewEntries.GymId = 1001;
-                NewEntries.Date = DateTime.Now;
-            }
-        }
-
-        await service.AddEntriesAsync(NewEntries);
-
     }
     private string GetTicketName(int ID)
     {

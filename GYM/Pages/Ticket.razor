@@ -14,8 +14,6 @@
                         {
                             <option value="@ticket.TicketId"> @ticket.Name </option>
                         }
-                        }
-                        }
                     </select>
                 </div>
                 <EditForm Model="@NewTicket">
@@ -141,7 +139,6 @@
                         <th>FirstUse</th>
                         <th>Gym</th>
                         <th>Suspend</th>
-
                     </tr>
                 </thead>
                 <tbody>
@@ -270,10 +267,6 @@ else
                 await service.AddClientTicketsAsync(NewTicket);
                 await RefreshClientTickets();
                 ErrorList = "";
-            }
-            else
-            {
-                ErrorList = "Invalid Barcode!";
             }
         }
     }

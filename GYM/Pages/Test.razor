@@ -1,46 +1,28 @@
 ﻿@page "/test"
 @inject Data.Database.GymServices service
 @inject Data.Models.BarCode barcode
-
-@if (barcode.IsAdmin)
+<MatFileUpload OnChange="@FilesReady" Label="Drop a single file here or Browse"></MatFileUpload>
+<img src="@src" alt="Profile" width="50" height="50">
+@foreach (var f in list)
 {
-<div class="row bg-light">
-    <div class="col-5 bg-light m-2 justify-content-center">
-        <div class="p-3 mb-3 text-white text-center" style="background-color: #05173D;">Add New Client Ticket</div>
-        <div class="text-center p-3 mb-3">
-            <label>Select Email:</label>
-            <select class="form-control" @bind="@SelectedEmailAddress">
-                @foreach (var client in Clients)
-                {
-                    <option value="@client.Email"> @client.Name </option>
-                }
-                }
-                }
-            </select>
-        </div>
-        <EditForm Model="@S">
-            <div class="form-group">
-                <label for="name" style=" color:red; font-weight:bold;">@Message</label>
-            </div>
-            <div class="form-group">
-                <label for="name" style=" color:red; font-weight:bold;">@SelectedEmailAddress</label>
-            </div>
-            <div class="form-group">
-                <label for="name">Subject</label>
-                <input type="text" id="name" class="form-control" @bind="@Subject" />
-            </div>
-            <div class="form-group">
-                <label for="name">Content</label>
-                <input type="text" id="name" class="form-control" @bind="@Content" />
-            </div>
-            <div class="text-center p-3 mb-3">
-                <button class="btn btn-info" @onclick="SendMail">Send mail!</button>
-            </div>
-        </EditForm>
-    </div>
-</div>
+    <div>@f</div>
 }
-@code {
+
+@code
+        {
+    List<string> list = new List<string>();
+    IMatFileUploadEntry src { get; set; }
+
+    void FilesReady(IMatFileUploadEntry[] files)
+    {
+        foreach (var file in files)
+        {
+            list.Add($"Name: {file.Name} - Size: {file.Size}");
+            src = file;
+        }
+    }
+}
+@*@code {
     Data.Models.Client S = new Data.Models.Client();
     private string Message { get; set; } = "";
     private string SelectedEmailAddress { get; set; }
@@ -65,7 +47,7 @@
                 mail.From = new MailAddress("gymblazor@gmail.com");
                 mail.To.Add(SelectedEmailAddress);
                 mail.Subject = Subject;
-                mail.Body = "<h3>"+Content+"</h3>";
+                mail.Body = "<h3>" + Content + "</h3>";
                 mail.IsBodyHtml = true;
                 using (SmtpClient smtp = new SmtpClient("smtp.gmail.com", 587))
                 {
@@ -82,4 +64,4 @@
         }
     }
 
-}
+}*@

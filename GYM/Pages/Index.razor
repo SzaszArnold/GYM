@@ -5,16 +5,24 @@
 <h2 class="center">Please scan your card! </h2>
 <div class="center" >
     <div class="row text-center">
-        <div class="text-center p-3 mb-3" >
+        <div class="text-center p-3 mb-3">
             <label for="Description">Bar Code</label>
         </div>
 
-        <div class="text-center p-3 mb-3" >
+        <div class="text-center p-3 mb-3">
             <input type="text" id="Description" class="form-control" @bind="@barcode.Code" />
         </div>
-        <div class="text-center p-3 mb-3" >
-            <a class="btn btn-info" href="/home" onclick="@SetClient()">Scan</a>
-        </div>
+        @if (!IsValidBarcode(barcode.Code))
+        {
+            <div class="text-center p-3 mb-3">
+                <a class="btn btn-info" href="/home" onclick="@SetClient()">Enter</a>
+            </div>
+        }
+        else
+        {   <div class="text-center p-3 mb-3">
+              <label for="name" style=" color:red; font-weight:bold;">Invalid card, try again!</label>
+            </div>
+        }
     </div>
 </div>
 
@@ -23,8 +31,6 @@
     protected override async Task OnInitializedAsync()
     {
         await RefreshClients();
-
-
 
     }
 
@@ -37,15 +43,21 @@
         if (barcode.Code == Clients[0].Barcode)
         {
             barcode.IsAdmin = true;
-           
+
         }
         else
         {
             barcode.IsAdmin = false;
-           
+
         }
         return true;
 
+    }
+    private bool IsValidBarcode(string Barcode)
+    {
+        bool valid = true;
+        foreach (var client in Clients) { if (client.Barcode == Barcode) { valid = false; } }
+        return valid;
     }
 
 }

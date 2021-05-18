@@ -8,8 +8,8 @@
 @foreach (var clientt in Clients)
 {
     @if (clientt.Barcode == barcode.Code && barcode.IsAdmin)
-    {<MatButton OnClick="@OpenDialogNew" Raised="true" TrailingIcon="person_add" Style="margin-bottom=5">Add New Client</MatButton>
-        <MatButton OnClick="@OpenDialogMail" Raised="true" TrailingIcon="email" Style="margin-bottom=5">Send Email</MatButton>
+    {<MatButton OnClick="@OpenDialogNew" Raised="true" TrailingIcon="person_add" Style="background-color: #05173D; margin-bottom =5">Add New Client</MatButton>
+        <MatButton OnClick="@OpenDialogMail" Raised="true" TrailingIcon="email"Style="background-color: #05173D; margin-bottom =5">Send Email</MatButton>
         <label></label>
         <div class="row bg-light">
             <table class="table table-bordered">
@@ -32,19 +32,19 @@
                     {
                         @foreach (var client in Clients)
                         {
-                            <tr>
-                                <td>@client.Name</td>
-                                <td>@client.Phone</td>
-                                <td>@client.Email</td>
-                                <td><img src="https://cdn4.iconfinder.com/data/icons/e-commerce-181/512/477_profile__avatar__man_-512.png" alt="Profile" width="50" height="50"></td>
-                                <td>@client.InsertDate</td>
-                                <td>@client.IDCard</td>
-                                <td>@client.Barcode</td>
-                                <td>@client.Comment</td>
-                                <td><button class="btn btn-warning" @onclick="(() => SetClientForUpdate(client))">Update</button></td>
-                                <td><button class="btn btn-danger" @onclick="(() => DeleteClient(client))">Delete</button></td>
+                    <tr>
+                        <td>@client.Name</td>
+                        <td>@client.Phone</td>
+                        <td>@client.Email</td>
+                        <td><img src="https://cdn4.iconfinder.com/data/icons/e-commerce-181/512/477_profile__avatar__man_-512.png" alt="Profile" width="50" height="50"></td>
+                        <td>@client.InsertDate</td>
+                        <td>@client.IDCard</td>
+                        <td>@client.Barcode</td>
+                        <td>@client.Comment</td>
+                        <td><MatIconButton Icon="update" OnClick="(() => SetClientForUpdate(client))"></MatIconButton></td>
+                        <td><MatIconButton Icon="delete_outline" OnClick="(() => DeleteClient(client))"></MatIconButton></td>
 
-                            </tr>
+                    </tr>
                         }
                     }
                     else
