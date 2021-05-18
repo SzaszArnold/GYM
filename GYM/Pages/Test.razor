@@ -1,23 +1,22 @@
 ﻿
 @page "/test"
-@using MatBlazor
+<div class="row bg-light">
+    <div class="text-center p-3 mb-3">
+        <label style="font-size:20px;" for="Description">Data On Page:</label>
+    </div>
+    <div class="text-center p-3 mb-3">
+        <select class="form-control" @bind="@Page">
+            <option style="font-size:20px;" value="5">5</option>
+            <option style="font-size:20px;" value="10">10</option>
+            <option style="font-size:20px;" value="50">50</option>
+            <option style="font-size:20px;" value="100">100</option>
+        </select>
+    </div>
+</div>
 
-<MatFileUpload OnChange="@FilesReady" Label="Drop a single file here or Browse"></MatFileUpload>
-
-@foreach (var f in list)
-{
-    <div>@f</div>
-}
 
 @code
         {
-    List<string> list = new List<string>();
+    int Page { get; set; }
 
-    void FilesReady(IMatFileUploadEntry[] files)
-    {
-        foreach (var file in files)
-        {
-            list.Add($"Name: {file.Name} - Size: {file.Size} ");
-        }
-    }
 }

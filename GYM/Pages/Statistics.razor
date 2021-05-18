@@ -14,14 +14,10 @@
             </div>
             <div class="text-center p-3 mb-3">
                 <select class="form-control" @bind="@SelectedFilter">
-
                     <option style="font-size:20px;" value=""> </option>
                     <option style="font-size:20px;" value="client">Client </option>
                     <option style="font-size:20px;" value="entries">Entries </option>
                     <option style="font-size:20px;" value="ticket">Tickets </option>
-
-
-
                 </select>
             </div>
         </div>
@@ -72,9 +68,6 @@
 
                         </tr>
                     }
-
-
-
                 }
                 else
                 {
@@ -183,174 +176,175 @@
     </div>
     <div class="text-center p-3 mb-3">
         <MatSlideToggle @bind-Value="@Valid" TValue="bool" Label="Valid"></MatSlideToggle>
-        </div>
-        <div class="row bg-light">
-            <label for="Description"></label>
-            <table class="table table-bordered">
-                <thead class="thead-light">
-                    <tr>
-                        <th>Client Name</th>
-                        <th>BarCode</th>
-                        <th>Valid</th>
-                        <th>Gym</th>
+    </div>
+    <div class="row bg-light">
+        <label for="Description"></label>
+        <table class="table table-bordered">
+            <thead class="thead-light">
+                <tr>
+                    <th>Client Name</th>
+                    <th>BarCode</th>
+                    <th>Valid</th>
+                    <th>Gym</th>
 
-                    </tr>
-                </thead>
-                <tbody>
-                    @if (Tickets.Any())
-                    {
-                        @if (SelectedTicketID == 0)
-                        {@foreach (var ticket in Tickets)
-
-                            {
-                                <tr>
-                                    <td>@GetClientName(ticket.ClientId)</td>
-                                    <td>@ticket.Barcode</td>
-                                    <td>@ticket.Valid</td>
-                                    <td>@GetGymName(ticket.GymId)</td>
-                                </tr>
-
-                            }
-                    }
-                    else
-                    {
-                        @foreach (var ticket in Tickets)
-                        {@if (ticket.TicketId == SelectedTicketID && ticket.Valid == Valid)
-                            {
-                                <tr>
-                                    <td>@GetClientName(ticket.ClientId)</td>
-                                    <td>@ticket.Barcode</td>
-                                    <td>@ticket.Valid</td>
-                                    <td>@GetGymName(ticket.GymId)</td>
-                                </tr>
-                            }
-                    }
-
-
-                    }
-
-                    }
-                </tbody>
-            </table>
-        </div>
-        }
-
-
-
-        @code {
-    public String BarCode { get; set; }
-        public String SelectedFilter { get; set; }
-        public String FilterName { get; set; }
-        public String FilterBarcode { get; set; }
-        public int SelectedTicketID { get; set; }
-        public int SelectedTicketIDEntrie { get; set; }
-        public bool Valid { get; set; }
-        List<Data.Models.SeasonTicket> SeasonTickets = new List<Data.Models.SeasonTicket>();
-        List<Data.Models.Client> Clients = new List<Data.Models.Client>();
-        List<Data.Models.Entries> Entries = new List<Data.Models.Entries>();
-        List<Data.Models.Room> Gym = new List<Data.Models.Room>();
-        List<Data.Models.ClientTickets> Tickets = new List<Data.Models.ClientTickets>();
-        protected override async Task OnInitializedAsync()
-        {
-            await Refresh();
-            FilterName = "";
-            SelectedTicketID = 0;
-            FilterBarcode = "";
-        }
-
-        private async Task Refresh()
-        {
-
-            await RefreshClients();
-            await RefreshEntries();
-            await RefreshTickets();
-            await RefreshSeasonTicket();
-            await RefreshGyms();
-
-        }
-
-        private async Task RefreshClients()
-        {
-            Clients = await service.GetClientAsync();
-        }
-        private async Task RefreshEntries()
-        {
-            Entries = await service.GetEntriesAsync();
-        }
-        private async Task RefreshTickets()
-        {
-            Tickets = await service.GetClientTicketsAsync();
-        }
-        private async Task RefreshSeasonTicket()
-        {
-            SeasonTickets = await service.GetTicketAsync();
-        }
-        private async Task RefreshGyms()
-        {
-            Gym = await service.GetRoomAsync();
-        }
-
-        public Data.Models.Client NewClient { get; set; } = new Data.Models.Client();
-        private async Task AddNewClient()
-        {
-            await service.AddClientAsync(NewClient);
-            NewClient = new Data.Models.Client();
-            await RefreshClients();
-        }
-
-        Data.Models.Client UpdateClient = new Data.Models.Client();
-        private void SetClientForUpdate(Data.Models.Client client)
-        {
-            UpdateClient = client;
-        }
-
-        private async Task UpdateClientData()
-        {
-            await service.UpdateClientAsync(UpdateClient);
-            await RefreshClients();
-        }
-
-        private async Task DeleteClient(Data.Models.Client client)
-        {
-            await service.DeleteClientAsync(client);
-            await RefreshClients();
-        }
-
-        public Data.Models.Entries NewEntries { get; set; } = new Data.Models.Entries();
-        private async Task AddNewEntries()
-        {
-
-            foreach (var client in Clients)
-            {
-                if (client.Barcode == BarCode)
+                </tr>
+            </thead>
+            <tbody>
+                @if (Tickets.Any())
                 {
-                    NewEntries.ClientId = client.ClientId;
-                    NewEntries.Barcode = BarCode;
-                    NewEntries.GymId = 1001;
-                    NewEntries.Date = DateTime.Now;
+                    @if (SelectedTicketID == 0)
+                    {@foreach (var ticket in Tickets)
+
+                        {
+                            <tr>
+                                <td>@GetClientName(ticket.ClientId)</td>
+                                <td>@ticket.Barcode</td>
+                                <td>@ticket.Valid</td>
+                                <td>@GetGymName(ticket.GymId)</td>
+                            </tr>
+
+                        }
                 }
+                else
+                {
+                    @foreach (var ticket in Tickets)
+                    {@if (ticket.TicketId == SelectedTicketID && ticket.Valid == Valid)
+                        {
+                            <tr>
+                                <td>@GetClientName(ticket.ClientId)</td>
+                                <td>@ticket.Barcode</td>
+                                <td>@ticket.Valid</td>
+                                <td>@GetGymName(ticket.GymId)</td>
+                            </tr>
+                        }
+                }
+
+
+                }
+
+                }
+            </tbody>
+        </table>
+    </div>
+}
+
+
+
+@code {
+    int Page=0;
+    public String BarCode { get; set; }
+    public String SelectedFilter { get; set; }
+    public String FilterName { get; set; }
+    public String FilterBarcode { get; set; }
+    public int SelectedTicketID { get; set; }
+    public int SelectedTicketIDEntrie { get; set; }
+    public bool Valid { get; set; }
+    List<Data.Models.SeasonTicket> SeasonTickets = new List<Data.Models.SeasonTicket>();
+    List<Data.Models.Client> Clients = new List<Data.Models.Client>();
+    List<Data.Models.Entries> Entries = new List<Data.Models.Entries>();
+    List<Data.Models.Room> Gym = new List<Data.Models.Room>();
+    List<Data.Models.ClientTickets> Tickets = new List<Data.Models.ClientTickets>();
+    protected override async Task OnInitializedAsync()
+    {
+        await Refresh();
+        FilterName = "";
+        SelectedTicketID = 0;
+        FilterBarcode = "";
+    }
+
+    private async Task Refresh()
+    {
+
+        await RefreshClients();
+        await RefreshEntries();
+        await RefreshTickets();
+        await RefreshSeasonTicket();
+        await RefreshGyms();
+
+    }
+
+    private async Task RefreshClients()
+    {
+        Clients = await service.GetClientAsync();
+    }
+    private async Task RefreshEntries()
+    {
+        Entries = await service.GetEntriesAsync();
+    }
+    private async Task RefreshTickets()
+    {
+        Tickets = await service.GetClientTicketsAsync();
+    }
+    private async Task RefreshSeasonTicket()
+    {
+        SeasonTickets = await service.GetTicketAsync();
+    }
+    private async Task RefreshGyms()
+    {
+        Gym = await service.GetRoomAsync();
+    }
+
+    public Data.Models.Client NewClient { get; set; } = new Data.Models.Client();
+    private async Task AddNewClient()
+    {
+        await service.AddClientAsync(NewClient);
+        NewClient = new Data.Models.Client();
+        await RefreshClients();
+    }
+
+    Data.Models.Client UpdateClient = new Data.Models.Client();
+    private void SetClientForUpdate(Data.Models.Client client)
+    {
+        UpdateClient = client;
+    }
+
+    private async Task UpdateClientData()
+    {
+        await service.UpdateClientAsync(UpdateClient);
+        await RefreshClients();
+    }
+
+    private async Task DeleteClient(Data.Models.Client client)
+    {
+        await service.DeleteClientAsync(client);
+        await RefreshClients();
+    }
+
+    public Data.Models.Entries NewEntries { get; set; } = new Data.Models.Entries();
+    private async Task AddNewEntries()
+    {
+
+        foreach (var client in Clients)
+        {
+            if (client.Barcode == BarCode)
+            {
+                NewEntries.ClientId = client.ClientId;
+                NewEntries.Barcode = BarCode;
+                NewEntries.GymId = 1001;
+                NewEntries.Date = DateTime.Now;
             }
-
-            await service.AddEntriesAsync(NewEntries);
-
-        }
-        private string GetTicketName(int ID)
-        {
-            string Name = "";
-            foreach (var ticket in SeasonTickets) { if (ticket.TicketId == ID) { Name = ticket.Name; } }
-            return Name;
-        }
-        private string GetGymName(int ID)
-        {
-            string Name = "";
-            foreach (var gym in Gym) { if (gym.GymId == ID) { Name = gym.Name; } }
-            return Name;
         }
 
-        private string GetClientName(int ID)
-        {
-            string Name = "";
-            foreach (var client in Clients) { if (client.ClientId == ID) { Name = client.Name; } }
-            return Name;
-        }
-        }
+        await service.AddEntriesAsync(NewEntries);
+
+    }
+    private string GetTicketName(int ID)
+    {
+        string Name = "";
+        foreach (var ticket in SeasonTickets) { if (ticket.TicketId == ID) { Name = ticket.Name; } }
+        return Name;
+    }
+    private string GetGymName(int ID)
+    {
+        string Name = "";
+        foreach (var gym in Gym) { if (gym.GymId == ID) { Name = gym.Name; } }
+        return Name;
+    }
+
+    private string GetClientName(int ID)
+    {
+        string Name = "";
+        foreach (var client in Clients) { if (client.ClientId == ID) { Name = client.Name; } }
+        return Name;
+    }
+}

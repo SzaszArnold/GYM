@@ -27,7 +27,7 @@
             <MatDialog @bind-IsOpen="@dialogIsOpen">
                 <MatDialogTitle style="font-size:20px;">Hi @barcode.Code</MatDialogTitle>
                 <MatDialogContent>
-                        <label style="font-size:20px;" for="Description">@Succes</label>                 
+                        <label for="Description" style=" color:red; font-weight:bold;">@Succes</label>                 
                 </MatDialogContent>
                 <MatDialogActions>
                     <MatButton OnClick="@(e => { dialogIsOpen = false; })">Ok</MatButton>
@@ -216,7 +216,7 @@ else
             if (clientTicket.TicketId == SelectedTicketID && clientTicket.Barcode == barcode.Code)
             {
                 UpdateClientTicket = clientTicket;
-                if (UpdateClientTicket.Entries < GetValidIntervall(UpdateClientTicket.TicketId) && UpdateClientTicket.Valid==true)
+                if (UpdateClientTicket.Entries < GetValidIntervall(UpdateClientTicket.TicketId) && UpdateClientTicket.Valid==true && UpdateClientTicket.FirstUse>=DateTime.Now)
                 {
 
                     UpdateClientTicket.Entries += 1;

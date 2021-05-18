@@ -15,7 +15,7 @@ namespace GYM.Data.Models
         public DateTime Bought { get; set; }
         public string Barcode { get; set; }
         public int Entries { get; set; }
-        public int Price { get; set; }
+        public double Price { get; set; }
         public bool Valid { get; set; }
         public DateTime FirstUse { get; set; }
         public int GymId { get; set; }

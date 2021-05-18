@@ -61,26 +61,28 @@
                 <MatDialogTitle>Add New Client</MatDialogTitle>
                 <MatDialogContent>
                     <EditForm Model="@NewClient">
-                        
+                        <div class="form-group">
+                            <label for="name" style=" color:red; font-weight:bold;">@ErrorList</label>
+                        </div>
                         <div class="form-group">
                             <label for="name">Client Name</label>
-                            <input type="text" id="name" class="form-control" @bind-value="@NewClient.Name" />
+                            <input type="text" id="name" placeholder="John" class="form-control" @bind-value="@NewClient.Name" />
                         </div>
 
                         <div class="form-group">
                             <label for="price">Phone</label>
-                            <input type="text" id="price" class="form-control" @bind="@NewClient.Phone" />
+                            <input type="text" id="price" placeholder="0741739002" class="form-control" @bind="@NewClient.Phone" />
                         </div>
 
                         <div class="form-group">
                             <label for="quantity">Email</label>
-                            <input type="text" id="quantity" class="form-control" @bind="@NewClient.Email" />
+                            <input type="text" id="quantity"placeholder="john@gmail.com" class="form-control" @bind="@NewClient.Email" />
                         </div>
 
-                        <div class="form-group">
+                        @*<div class="form-group">
                             <label for="Description">Photo</label>
                             <input type="text" id="Description" class="form-control" @bind="@NewClient.Photo" />
-                        </div>
+                        </div>*@
 
                         <div class="form-group">
                             <label for="Description">IdCard</label>
@@ -88,7 +90,7 @@
                         </div>
                         <div class="form-group">
                             <label for="Description">Barcode</label>
-                            <input type="text" id="Description" class="form-control" @bind="@NewClient.Barcode" />
+                            <input type="text" id="Description" placeholder="123John12" class="form-control" @bind="@NewClient.Barcode" />
                         </div>
                         <div class="form-group">
                             <label for="Description">Comment</label>
@@ -106,6 +108,9 @@
                 <MatDialogContent>
                     <EditForm Model="@UpdateClient">
                         <div class="form-group">
+                            <label for="name" style=" color:red; font-weight:bold;">@ErrorList</label>
+                        </div>
+                        <div class="form-group">
                             <label for="name">Client Name</label>
                             <input type="text" id="name" class="form-control" @bind-value="@UpdateClient.Name" />
                         </div>
@@ -117,10 +122,10 @@
                             <label for="quantity">Email</label>
                             <input type="text" id="quantity" class="form-control" @bind="@UpdateClient.Email" />
                         </div>
-                        <div class="form-group">
-                            <label for="Description">Photo</label>
-                            <input type="text" id="Description" class="form-control" @bind="@UpdateClient.Photo" />
-                        </div>
+                        @*<div class="form-group">
+            <label for="Description">Photo</label>
+            <input type="text" id="Description" class="form-control" @bind="@UpdateClient.Photo" />
+        </div>*@
                         <div class="form-group">
                             <label for="Description">IdCard</label>
                             <input type="text" id="Description" class="form-control" @bind="@UpdateClient.IDCard" />
@@ -146,6 +151,7 @@
     @code {
 
         List<Data.Models.Client> Clients = new List<Data.Models.Client>();
+        public string ErrorList { get; set; }
         protected override async Task OnInitializedAsync()
         {
             await RefreshClients();
@@ -160,13 +166,21 @@
         private async Task AddNewClient()
         {
 
-            await service.AddClientAsync(NewClient);
+            //NewClient = new Data.Models.Client();
             NewClient.IsDeleted = false;
             NewClient.InsertDate = DateTime.Now;
-            NewClient = new Data.Models.Client();
+            if (Utils.isValidEmail(NewClient.Email) && Utils.IsValidName(NewClient.Name) && Utils.IsOnlyDigits(NewClient.Phone) && IsValidBarcode(NewClient.Barcode))
+            {
+                await service.AddClientAsync(NewClient);
+                await RefreshClients();
+                dialogIsOpenNew = false;
+                ErrorList = "";
+            }
+            else
+            {
+                ErrorList = "Invalid Input Data";
+            }
 
-            await RefreshClients();
-            dialogIsOpenNew = false;
         }
 
         Data.Models.Client UpdateClient = new Data.Models.Client();
@@ -178,9 +192,14 @@
 
         private async Task UpdateClientData()
         {
-            await service.UpdateClientAsync(UpdateClient);
-            await RefreshClients();
-            dialogIsOpenUpdate = false;
+            if (Utils.isValidEmail(UpdateClient.Email) && Utils.IsValidName(UpdateClient.Name) && Utils.IsOnlyDigits(UpdateClient.Phone))
+            {
+                await service.UpdateClientAsync(UpdateClient);
+                await RefreshClients();
+                dialogIsOpenUpdate = false;
+                ErrorList = "";
+            }
+            else { ErrorList = "Invalid Input Data"; }
         }
 
         private async Task DeleteClient(Data.Models.Client client)
@@ -200,6 +219,12 @@
         void OpenDialogUpdate()
         {
             dialogIsOpenUpdate = true;
+        }
+        private bool IsValidBarcode(string Barcode)
+        {
+            bool valid = true;
+            foreach (var client in Clients) { if (client.Barcode == Barcode) { valid = false; } }
+            return valid;
         }
     }
 }
