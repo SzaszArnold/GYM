@@ -285,7 +285,7 @@
                     mail.IsBodyHtml = true;
                     using (SmtpClient smtp = new SmtpClient("smtp.gmail.com", 587))
                     {
-                        smtp.Credentials = new System.Net.NetworkCredential("gymblazor@gmail.com", "123456Gym");
+                        smtp.Credentials = new System.Net.NetworkCredential("gymblazor@gmail.com", "password");
                         smtp.EnableSsl = true;
                         smtp.Send(mail);
                         Message = "Sent";
